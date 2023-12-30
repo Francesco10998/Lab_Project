@@ -1,24 +1,12 @@
-const db = require("./DB_Connection");
+//const db = require("./DB_Connection");
 const express = require("express");
 
 const PORT = 8000;
 
 const app = express();
 
-/*inizialize session
-app.use(expressSession({
-  secret: 'Frafeffoluigi',
-  resave: false,
-  saveUninitialized: false
-}));
-
-app.use(function(req,res,next) {
-  res.locals.session = req.session;
-  next();
-});*/
-
 app.get("/api", (req, res) => {
-    res.json({ message: "Hello from server!" });
+    res.json({ "users": ["userOne","userTwo", "userThree"] });
   });
 
 app.listen(PORT, () => {
