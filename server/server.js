@@ -1,5 +1,7 @@
-var mysql = require('mysql2');
 const express = require("express");
+
+const utils = require("./util");
+
 
 const PORT = 8000;
 
@@ -16,35 +18,50 @@ app.get("/home", (req, res) => {
 
 //------------------login page --------------------------
 app.get("/login", (req, res) => {
-  //database connection
-  var connection = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "FraFeffo_98",
-    database : 'golden_auctions'
-  });
 
   //take the username and password passate da react
-  var data = req.body
+  var data = req.query;
+  //console.log(data)
 
-  Query = 'SELECT * FROM users WHERE username ='+data.username+'AND pass ='+data.pass;
+  username = data.username;
+  password = data.password;
+  encoded_password = utils.sha256(password)//per dopo
+
+  //control the username in the database
+  QueryUsername = 'SELECT * FROM users WHERE username="'+username+'"';
 
   //execute query
-  connection.query(Query, function (error, results, fields) {
+  utils.connection.query(QueryUsername, function (error, results, fields) {
     if (error) throw error;
     else{
-      console.log('user authenticated: ', results);
+      if(results != null){
+        console.log('usernames exists: ', results);
+        //control the password
+        QueryPassword = 'SELECT * FROM users WHERE username="'+username+'" AND '+'pass="'+password+'"';
+        utils.connection.query(QueryPassword, function (error, results, fields) {
+          if (error) throw error;
+          else{
+            if(results != null){
+              console.log('user authenticated');
+              res.json({ "results": ["authenticated"] });
+              //close database connection
+              utils.connection.end(function(err) {
+                // The connection is terminated now
+                console.log('connection with database terminated')
+              });
+            }else{
+              console.log('password inserted is wrong');
+              res.json({ "results": ["wrong password"] });
+            }
+          }
+        });
+      }else{
+        console.log('username wrong');
+        res.json({ "results": ["wrong username"] });
+      }
     }
   });
-  
- 
-  res.json({ "users": ["userOne","userTwo", "userThree"] });
-  
-  //close database connection
-  con.end(function(err) {
-    // The connection is terminated now
-    console.log('connection terminated')
-  });
+
 });
 
 //------------------ register page ------------------------
