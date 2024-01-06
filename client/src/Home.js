@@ -1,5 +1,9 @@
 import { Link, Navigate } from "react-router-dom";
 import './css/Home.css';
+import iphone from "./iphone.jpg"
+import plus from "./plus.png"
+import logo from "./logo.jpg"
+import trending from "./trending.png"
 
 function Home() {
     //const containerStyle = {
@@ -17,9 +21,10 @@ return (<div>
 
 function Titolo(){
   return (
-    <h1 class="titolo">
-    Trending Auctions
-  </h1>
+    <div style={{ textAlign: 'center',backgroundColor:'#333333',height:'30px'}}>
+     <img src={trending} style={{height:'100px', width:'430px', margin:'auto', marginTop:'-15px'}}></img>
+    </div>
+  
   )
 }
 
@@ -29,61 +34,80 @@ function Navbar(){
 <a href="#Settings">Settings</a>
 <a href="#MyOffers">My Offers</a>
 <a href="#MyAuctions">My Auctions</a>
+
+    <form action="/search" method="get" style={{padding:'13px'}}>
+      <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
+      <input type="submit" value="Search"style={{borderRadius:'10px'}} />
+    </form>
+
 </div>
 )
 }
 
 function Auctions(){
   return(
+    <div style={{padding:'15px'}}>
+      <a href="Login.html" style={{display: 'flex', width:'170px'}}>
+        <button style={{borderRadius:'10px'}}>Create a new Auction</button>
+        <img src={plus} style={{ width:'20px' , height:'20px'}}></img>
+      </a>
+    <br></br>
     <div class="grid">
       <article>
-        <img src="iphone.jpg" alt="Sample photo"></img>
-        <div class="text">
-          <h3>Seamlessly visualize quality</h3>
-          <p>Collaboratively administrate empowered markets via plug-and-play networks.</p>
-          <button>Here's why</button>
+        <img src={iphone} />
+        <div class="text" style={{ textAlign: 'center' }} >
+          <h3>Iphone 14</h3>
+          <p> Leading offer = 500$ </p>
+          <p> Ends in 14hrs </p>
+          <button>Go to the Auction</button>
         </div>
       </article>
       <article>
-        <img src="iphone.jpg" alt="Sample photo"></img>
-        <div class="text">
-          <h3>Completely Synergize</h3>
-          <p>Dramatically engage seamlessly visualize quality intellectual capital without superior collaboration and idea-sharing.</p>
-          <button>Here's how</button>
+      <img src={iphone} ></img>
+        <div class="text" style={{ textAlign: 'center' }} >
+          <h3>Iphone 14</h3>
+          <p> Leading offer = 500$ </p>
+          <p> Ends in 14hrs </p>
+          <button>Go to the Auction</button>
         </div>
       </article>
       <article>
-        <img src="/img/iphone.jpg" alt="Sample photo"></img>
-        <div class="text">
-          <h3>Dynamically Procrastinate</h3>
-          <p>Completely synergize resource taxing relationships via premier niche markets.</p>
-          <button>Read more</button>
+      <img src={iphone} ></img>
+        <div class="text" style={{ textAlign: 'center' }} >
+          <h3>Iphone 14</h3>
+          <p> Leading offer = 500$ </p>
+          <p> Ends in 14hrs </p>
+          <button>Go to the Auction</button>
         </div>
       </article>
       <article>
-        <img src="/img/iphone.jpg" alt="Sample photo"></img>
-        <div class="text">
-          <h3>Best in class</h3>
-          <p>Imagine jumping into that boat, and just letting it sail wherever the wind takes you...</p>
-          <button>Just do it...</button>
+      <img src={iphone} ></img>
+        <div class="text" style={{ textAlign: 'center' }} >
+          <h3>Iphone 14</h3>
+          <p> Leading offer = 500$ </p>
+          <p> Ends in 14hrs </p>
+          <button>Go to the Auction</button>
         </div>
       </article>
       <article>
-        <img src="./img/iphone.jpg" alt="Sample photo"></img>
-        <div class="text">
-          <h3>Dynamically innovate supply chains</h3>
-          <p>Holisticly predominate extensible testing procedures for reliable supply chains.</p>
-          <button>Here's why</button>
+      <img src={iphone} ></img>
+        <div class="text" style={{ textAlign: 'center' }} >
+          <h3>Iphone 14</h3>
+          <p> Leading offer = 500$ </p>
+          <p> Ends in 14hrs </p>
+          <button>Go to the Auction</button>
         </div>
       </article>
       <article>
-        <img src="/img/iphone.jpg" alt="Sample photo"></img>
-        <div class="text">
-          <h3>Sanity check</h3>
-          <p>Objectively innovate empowered manufactured products whereas parallel platforms.</p>
-          <button>Stop here</button>
+      <img src={iphone} ></img>
+        <div class="text" style={{ textAlign: 'center' }} >
+          <h3>Iphone 14</h3>
+          <p> Leading offer = 500$ </p>
+          <p> Ends in 14hrs </p>
+          <button>Go to the Auction</button>
         </div>
       </article>
+    </div>
     </div>
   )
 
