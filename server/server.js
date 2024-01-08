@@ -6,22 +6,35 @@ const utils = require("./util");
 const PORT = 8000;
 
 const app = express();
+const cors = require('cors');
+
+//-----allow-cross-origin------//
+
+/*app.use((req, res, next) => {
+ res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+ res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+ res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+ next();
+});
+*/
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 //----------------- app routing -------------------------
 app.get("/", (req, res) => {
-  res.json({ "users": ["userOne","userTwo", "userThree"] });
+  res.json({ message: "Hello from server!" });
 });
 //------------------home page ---------------------------
 app.get("/home", (req, res) => {
-    res.json({ "users": ["userOne","userTwo", "userThree"] });
+  res.json({ message: "Hello from server!" });
   });
 
 //------------------login page --------------------------
 app.get("/login", (req, res) => {
 
+
+  console.log('ciao');
   //take the username and password passate da react
   var data = req.query;
-  //console.log(data)
 
   username = data.username;
   password = data.password;

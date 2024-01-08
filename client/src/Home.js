@@ -29,8 +29,8 @@ function Titolo(){
 }
 
 function Navbar(){
-  return (<div class="topnav">
-<a class="active" href="#Login">Login</a>
+  return (<div className="topnav">
+<Link className="active" to="/login">Login</Link>
 <a href="#Settings">Settings</a>
 <a href="#MyOffers">My Offers</a>
 <a href="#MyAuctions">My Auctions</a>
@@ -52,10 +52,10 @@ function Auctions(){
         <img src={plus} style={{ width:'20px' , height:'20px'}}></img>
       </a>
     <br></br>
-    <div class="grid">
+    <div className="grid">
       <article>
         <img src={iphone} />
-        <div class="text" style={{ textAlign: 'center' }} >
+        <div className="text" style={{ textAlign: 'center' }} >
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
@@ -64,7 +64,7 @@ function Auctions(){
       </article>
       <article>
       <img src={iphone} ></img>
-        <div class="text" style={{ textAlign: 'center' }} >
+        <div className="text" style={{ textAlign: 'center' }} >
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
@@ -73,7 +73,7 @@ function Auctions(){
       </article>
       <article>
       <img src={iphone} ></img>
-        <div class="text" style={{ textAlign: 'center' }} >
+        <div className="text" style={{ textAlign: 'center' }} >
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
@@ -82,7 +82,7 @@ function Auctions(){
       </article>
       <article>
       <img src={iphone} ></img>
-        <div class="text" style={{ textAlign: 'center' }} >
+        <div className="text" style={{ textAlign: 'center' }} >
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
@@ -91,7 +91,7 @@ function Auctions(){
       </article>
       <article>
       <img src={iphone} ></img>
-        <div class="text" style={{ textAlign: 'center' }} >
+        <div className="text" style={{ textAlign: 'center' }} >
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
@@ -100,7 +100,7 @@ function Auctions(){
       </article>
       <article>
       <img src={iphone} ></img>
-        <div class="text" style={{ textAlign: 'center' }} >
+        <div className="text" style={{ textAlign: 'center' }} >
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
