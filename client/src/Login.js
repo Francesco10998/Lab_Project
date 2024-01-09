@@ -15,13 +15,23 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
 
     try {
-      const response = await fetch('/login');
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add other headers if necessary
+        },
+        body: JSON.stringify({username: username,
+          password: password,}),
+      });
+
       if (!response.ok) {
         throw new Error('Network response was not ok.');
       }
+
       const result = await response.json();
       setData(result);
     } catch (error) {
