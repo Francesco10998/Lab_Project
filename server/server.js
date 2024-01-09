@@ -6,6 +6,7 @@ const utils = require("./util");
 const PORT = 8000;
 
 const app = express();
+app.use(express.json());
 const cors = require('cors');
 
 //-----allow-cross-origin------//
@@ -29,29 +30,34 @@ app.get("/home", (req, res) => {
   });
 
 //------------------login page --------------------------
-app.get("/login", (req, res) => {
-
+app.post("/login", (req, res) => {
 
   console.log('ciao');
   //take the username and password passate da react
   var data = req.query;
 
-  username = data.username;
+  const { username, password } = req.body;
+  console.log(username,password);
+
+  /* username = data.username;
   password = data.password;
   encoded_password = utils.sha256(password)//per dopo
+  */
 
   //control the username in the database
   QueryUsername = 'SELECT * FROM users WHERE username="'+username+'"';
 
   //execute query
-  utils.connection.query(QueryUsername, function (error, results, fields) {
+  utils.pool.query(QueryUsername, function (error, results, fields) {
     if (error) throw error;
     else{
-      if(results.lenght != 0){
+      console.log(results);
+      console.log(results.length);
+      if(results.length!=0){
         console.log('usernames exists');
         //control the password
         QueryPassword = 'SELECT * FROM users WHERE username="'+username+'" AND '+'pass="'+password+'"';
-        utils.connection.query(QueryPassword, function (error, results, fields) {
+        utils.pool.query(QueryPassword, function (error, results, fields) {
           if (error) throw error;
           else{
             if(results.lenght != 0){
@@ -62,10 +68,10 @@ app.get("/login", (req, res) => {
               res.json({ "results": ["wrong password"] });
             }
             //close database connection
-            utils.connection.end(function(err) {
+            //utils.pool.end(function(err) {
             // The connection is terminated now
-            console.log('connection with database terminated')
-            });
+            //console.log('connection with database terminated')
+            //});
           }
         });
       }else{
@@ -78,7 +84,7 @@ app.get("/login", (req, res) => {
 });
 
 //------------------ register page ------------------------
-app.get("/register", (req, res) => {
+app.post("/register", (req, res) => {
   //take the username ,email and password passate da react
   var data = req.query;
   //console.log(data)
@@ -96,7 +102,7 @@ app.get("/register", (req, res) => {
   QueryUsername = 'SELECT * FROM users WHERE username="'+username+'"';
 
   //execute query
-  utils.connection.query(QueryUsername, function (error, results, fields) {
+  utils.pool.query(QueryUsername, function (error, results, fields) {
     if (error) throw error;
     else{
       if(results.length != 0){//username already exist part
@@ -105,7 +111,7 @@ app.get("/register", (req, res) => {
       }
       else{//ok username , check the email
         QueryEmail = 'SELECT * FROM users WHERE email="'+email+'"';
-        utils.connection.query(QueryEmail, function (error, results, fields) {
+        utils.pool.query(QueryEmail, function (error, results, fields) {
           if (error) throw error;
           else{
             if(results.length != 0){//email already exist part
@@ -114,7 +120,7 @@ app.get("/register", (req, res) => {
             }
             else{//ok email, create the account in the database
               QueryNewUser = 'INSERT INTO users (username, email, pass, address, phoneNumber, paymentMethod) VALUES ("'+username+'", "'+email+'", "'+encoded_password+'", "'+address+'","'+cell+'","'+paymentMethod+'")';
-              utils.connection.query(QueryNewUser, function (error, results, fields) {
+              utils.pool.query(QueryNewUser, function (error, results, fields) {
                 if (error) throw error;
                 else{
                   if(results.length != 0){//user inserted
@@ -125,7 +131,7 @@ app.get("/register", (req, res) => {
                     res.json({ "results": ["user_not_inserted"] });
                   }
                   //close database connection
-                  utils.connection.end(function(err) {
+                  utils.pool.end(function(err) {
                   // The connection is terminated now
                   console.log('connection with database terminated')
               });

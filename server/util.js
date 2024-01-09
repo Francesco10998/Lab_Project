@@ -9,13 +9,25 @@ function sha256(content) {
 
 var mysql = require('mysql2');
 
-var connection = mysql.createConnection({
+
+/*var connection = mysql.createConnection({
     host: "127.0.0.1",
     user: "root",
     password: "FraFeffo_98",
     database : 'golden_auctions'
   });
+*/
+
+var pool = mysql.createPool({
+  host: "127.0.0.1",
+  user: "root",
+  password: "FraFeffo_98",
+  database : 'golden_auctions',
+  waitForConnections: true,
+  connectionLimit: 10, // Modifica il limite in base alle tue esigenze
+  queueLimit: 0
+});
 
 
 
-module.exports = { sha256,connection };
+module.exports = { sha256,pool };

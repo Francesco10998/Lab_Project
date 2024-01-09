@@ -15,18 +15,23 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async () => {
 
     try {
       const response = await fetch('/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://localhost:8000',
           // Add other headers if necessary
         },
-        body: JSON.stringify({username: username,
-          password: password,}),
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
       });
+      
+      console.log(username,password);
 
       if (!response.ok) {
         throw new Error('Network response was not ok.');
@@ -38,10 +43,6 @@ const Login = () => {
       console.error('Error fetching data:', error);
     }
   };
-
-  useEffect(() => {
-    handleSubmit();
-  }, []);
 
 
   return (
