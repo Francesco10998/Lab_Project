@@ -1,4 +1,4 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate,useHistory } from "react-router-dom";
 import './css/Home.css';
 import iphone from "./iphone.jpg"
 import plus from "./plus.png"
@@ -31,7 +31,7 @@ function Titolo(){
 function Navbar(){
   return (<div className="topnav">
 <Link className="active" to="/login">Login</Link>
-<a href="#Settings">Settings</a>
+<Link to="/settings">Settings</Link>
 <a href="#MyOffers">My Offers</a>
 <a href="#MyAuctions">My Auctions</a>
 

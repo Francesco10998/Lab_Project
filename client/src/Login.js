@@ -1,11 +1,14 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate ,useNavigate } from "react-router-dom";
 import React, { useEffect,useState } from 'react';
 import './css/Login.css';
+
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [data, setData] = useState(null);
+  const navigate = useNavigate();
+
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -15,7 +18,9 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+
+    event.preventDefault();
 
     try {
       const response = await fetch('/login', {
@@ -30,8 +35,6 @@ const Login = () => {
           password: password,
         }),
       });
-      
-      console.log(username,password);
 
       if (!response.ok) {
         throw new Error('Network response was not ok.');
@@ -39,7 +42,12 @@ const Login = () => {
 
       const result = await response.json();
       setData(result);
-    } catch (error) {
+      if(result.results=="authenticated"){
+        console.log('ciaoooooooooooooooooooooooooooooo');
+        navigate('/');
+      }
+    } 
+    catch (error) {
       console.error('Error fetching data:', error);
     }
   };

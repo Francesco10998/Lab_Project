@@ -38,8 +38,9 @@ app.post("/login", (req, res) => {
 
   /* username = data.username;
   password = data.password;
-  encoded_password = utils.sha256(password)//per dopo
   */
+  encoded_password = utils.sha256(password)//per dopo
+  
 
   //control the username in the database
   QueryUsername = 'SELECT * FROM users WHERE username="'+username+'"';
@@ -53,11 +54,11 @@ app.post("/login", (req, res) => {
       if(results.length!=0){
         console.log('usernames exists');
         //control the password
-        QueryPassword = 'SELECT * FROM users WHERE username="'+username+'" AND '+'pass="'+password+'"';
+        QueryPassword = 'SELECT * FROM users WHERE username="'+username+'" AND '+'pass="'+encoded_password+'"';
         utils.pool.query(QueryPassword, function (error, results, fields) {
           if (error) throw error;
           else{
-            if(results.lenght != 0){
+            if(results.length != 0){
               console.log('user authenticated');
               res.json({ "results": ["authenticated"] });
             }else{
