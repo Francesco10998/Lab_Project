@@ -1,10 +1,12 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useRouteLoaderData } from "react-router-dom";
 import React, { useEffect,useState } from 'react';
 import './css/Settings.css';
 import trending from "./trending.png"
 import card from "./Card.png"
 
 const Settings = () => {
+
+  const [data, setData] = useState(null);
 
   function Titolo(){
     return (
@@ -20,7 +22,7 @@ const Settings = () => {
   <Link className="active" to="/login">Login</Link>
   <Link to="/settings">Settings</Link>
   <a href="#MyOffers">My Offers</a>
-  <a href="#MyAuctions">My Auctions</a>
+  <Link to="/myauctions">My Auctions</Link>
   
       <form action="/search" method="get" style={{padding:'13px'}}>
         <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
@@ -30,6 +32,45 @@ const Settings = () => {
   </div>
   )
   }
+
+  const username=sessionStorage.getItem('userData');
+  const mode='enter';
+
+  const Display = async () => {
+
+    try {
+      const response = await fetch('/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://localhost:8000',
+          // Add other headers if necessary
+        },
+        body: JSON.stringify({
+          mode : mode,
+          username: username,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+
+      const result = response.json();
+      console.log(result['PromiseResult']);
+
+    } 
+    catch (error) {
+      console.error('Error fetching data:', error);
+    }
+
+  }
+
+  useEffect(() =>{
+      Display();
+  })
+
+
 
 
   return (<div>

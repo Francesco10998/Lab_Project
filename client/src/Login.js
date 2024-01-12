@@ -44,6 +44,7 @@ const Login = () => {
       setData(result);
       if(result.results=="authenticated"){
         console.log('ciaoooooooooooooooooooooooooooooo');
+        sessionStorage.setItem('userData',username);
         navigate('/');
       }
     } 

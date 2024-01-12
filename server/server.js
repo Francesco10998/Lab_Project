@@ -143,6 +143,8 @@ app.post("/register", (req, res) => {
 app.post("/settings", (req, res) => {
 
   const { mode,username } = req.body;
+  console.log(mode,username);
+
   //------when open setting return all the data react will put on the placeholder--------//
   if(mode=="enter"){
     //username = "feffo98";
@@ -160,7 +162,9 @@ app.post("/settings", (req, res) => {
           //debugging
           console.log(results)
           //send user data to client
-          res.json({ "data_user": [results] });
+          res.json({'data_user': [results[0]['email']]});
+          console.log(results[0]['email']);
+
         }
       }
     });

@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route ,Navigate} from "react-router-dom";
 import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
+import Settings from "./Settings";
+import MyAuctions from "./MyAuctions";
 
 
 /*function App() {
@@ -44,6 +46,8 @@ function App(){
         <Route path="/" element={<Home/>} />
         <Route path="login" element={<Login/>} />
         <Route path="register" element={<Register/>}/>
+        <Route path="settings" element={<Settings/>}/>
+        <Route path="myauctions" element={<MyAuctions/>}/>
       </Routes>
     </BrowserRouter>
   )
