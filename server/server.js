@@ -159,11 +159,9 @@ app.post("/settings", (req, res) => {
       }
       else{
         if(results.length!=0){
-          //debugging
-          console.log(results)
           //send user data to client
-          res.json({'data_user': [results[0]['email']]});
-          console.log(results[0]['email']);
+          res.json({'data_user': [results[0]]});
+          console.log(results[0]);
 
         }
       }
@@ -292,8 +290,25 @@ app.get("/myoffers", (req, res) => {
 });
 
 //---------------- myauctions page ------------------------
-app.get("/myauctions", (req, res) => {
-  res.json({ "users": ["userOne","userTwo", "userThree"] });
+app.post("/myauctions", (req, res) => {
+  const { username } = req.body;
+
+  //Control the Auction of the User in the Database
+  QueryUsername = 'SELECT * FROM auctions WHERE creatorUsername="' + username + '"';
+
+  //execute query
+  utils.pool.query(QueryUsername, function (error, results, fields) {
+    if (error) throw error;
+    else{
+      console.log(results);
+      console.log(results.length);
+      if(results.length!=0){
+        console.log("Returning the User's Auction");
+        res.json(results)
+      }
+    }
+  });
+
 });
 
 
