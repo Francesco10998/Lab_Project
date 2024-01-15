@@ -7,6 +7,14 @@ import card from "./Card.png"
 const Settings = () => {
 
   const [data, setData] = useState(null);
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [pay, setPay] = useState('');
+  const [username, setUsername] = useState('');
+  const [mode,setMode] = useState('');
+  const [counter, setCounter] = useState(0);
 
   function Titolo(){
     return (
@@ -33,10 +41,12 @@ const Settings = () => {
   )
   }
 
-  const username=sessionStorage.getItem('userData');
-  const mode='enter';
-
   const Display = async () => {
+
+    setMode('enter');
+    console.log(mode,username);
+    setUsername(sessionStorage.getItem('userData'));
+    
 
     try {
       const response = await fetch('/settings', {
@@ -56,8 +66,15 @@ const Settings = () => {
         throw new Error('Network response was not ok.');
       }
 
-      const result = response.json();
-      console.log(result['PromiseResult']);
+      const result = await response.json();
+      console.log(result);
+
+      setEmail(result.data_user[0]['email']);
+      setPassword('password');
+      setPay(result.data_user[0]['paymentMethod']);
+      setPhone(result.data_user[0]['phoneNumber']);
+      setAddress(result.data_user[0]['address']);
+      console.log(password);
 
     } 
     catch (error) {
@@ -67,10 +84,11 @@ const Settings = () => {
   }
 
   useEffect(() =>{
+    if (counter < 2) {
       Display();
-  })
-
-
+      setCounter(counter + 1);
+    }
+  }, [counter]);
 
 
   return (<div>
@@ -82,31 +100,31 @@ const Settings = () => {
 
         <div class="form-group">
           <label class="label" for="username">Username:</label>
-          <input type="text" id="username" style={{width:'300px'}} name="username" required />
+          <input type="text" id="username" value={username} style={{width:'300px'}} name="username" required />
           <button type="submit" class="button" id="usernameSubmit">Change</button>
         </div>
 
         <div class="form-group">
           <label class="label" for="email">Email:</label>
-          <input type="email" id="email" style={{width:'300px'}} name="email" required />
+          <input type="email" id="email" value={email} style={{width:'300px'}} name="email" required />
           <button type="submit" class="button" id="emailSubmit">Change</button>
         </div>
 
         <div class="form-group">
           <label class="label" for="phone">Phone Number:</label>
-          <input type="tel" id="phone" style={{width:'300px'}} name="phone" required />
+          <input type="tel" id="phone"value={phone} style={{width:'300px'}} name="phone" required />
           <button type="submit" class="button" id="phoneSubmit">Change</button>
         </div>
 
         <div class="form-group">
           <label class="label" for="password">Password:</label>
-          <input type="password" style={{width:'300px'}} id="password" name="password" required />
+          <input type="password" value={password} style={{width:'300px'}} id="password" name="password" required />
           <button type="submit" class="button" id="passwordSubmit">Change</button>
         </div>
 
         <div class="form-group">
           <label class="label" for="address">Address:</label>
-          <input type="text" style={{width:'300px'}} id="address" name="address" required />
+          <input type="text" value={address} style={{width:'300px'}} id="address" name="address" required />
           <button type="submit" class="button" id="addressSubmit">Change</button>
         </div>
       </div>
@@ -119,7 +137,7 @@ const Settings = () => {
 
         <div class="form-group" style={{marginTop:'35px'}}>
           <label class="label" for="iban">IBAN:</label>
-          <input type="text" id="payment" style={{width:'300px'}} name="payment" required />
+          <input type="text" id="payment" value={pay} style={{width:'300px'}} name="payment" required />
           <button type="submit" class="button" id="paymentSubmit">Change</button>
         </div>
       </div>
