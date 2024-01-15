@@ -1,10 +1,51 @@
-import { Link, Navigate } from "react-router-dom";
-import React, { useEffect,useState } from 'react';
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
 import './css/MyAuctions.css';
 import trending from "./trending.png"
 import iphone from "./iphone.jpg"
 
 const MyAuctions = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [data, setData] = useState(null);
+  const navigate = useNavigate();
+
+  const Begin = async () => {
+    setUsername(sessionStorage.getItem('userData'));
+    try {
+      const response = await fetch('/myauctions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://localhost:8000',
+          // Add other headers if necessary
+        },
+        body: JSON.stringify({
+          username: username
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+
+      const result = await response.json();
+      setData(result);
+      if(result.results=="authenticated"){
+        console.log('ciaoooooooooooooooooooooooooooooo');
+        sessionStorage.setItem('userData',username);
+        navigate('/');
+      }
+    } 
+    catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  useEffect(() =>{
+    Begin();
+  });
+
 
   function Titolo(){
     return (
