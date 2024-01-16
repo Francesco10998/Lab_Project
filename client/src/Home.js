@@ -1,9 +1,9 @@
 import { Link, Navigate,useHistory } from "react-router-dom";
 import './css/Home.css';
-import iphone from "./iphone.jpg"
-import plus from "./plus.png"
-import logo from "./logo.jpg"
-import trending from "./trending.png"
+import iphone from "./images/iphone.jpg"
+import plus from "./images/plus.png"
+//import logo from "./images/logo.jpg"
+import trending from "./images/trending.png"
 
 function Home() {
     //const containerStyle = {

@@ -1,8 +1,8 @@
 import { Link, Navigate, useRouteLoaderData } from "react-router-dom";
 import React, { useEffect,useState } from 'react';
 import './css/Settings.css';
-import trending from "./trending.png"
-import card from "./Card.png"
+import trending from "./images/trending.png"
+import card from "./images/Card.png"
 
 const Settings = () => {
 

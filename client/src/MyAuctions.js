@@ -1,8 +1,8 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import './css/MyAuctions.css';
-import trending from "./trending.png"
-import iphone from "./iphone.jpg"
+import trending from "./images/trending.png"
+import iphone from "./images/iphone.jpg"
 
 const MyAuctions = () => {
   const [username, setUsername] = useState('');
