@@ -33,7 +33,7 @@ function Navbar(){
 <Link className="active" to="/login">Login</Link>
 <Link to="/settings">Settings</Link>
 <a href="#MyOffers">My Offers</a>
-<a href="#MyAuctions">My Auctions</a>
+<a href="MyAuctions">My Auctions</a>
 
     <form action="/search" method="get" style={{padding:'13px'}}>
       <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
@@ -59,7 +59,10 @@ function Auctions(){
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
-          <button>Go to the Auction</button>
+          <Link to="/auction">
+            <button class="redirect">Go to the Auction</button>
+          </Link>
+
         </div>
       </article>
       <article>
@@ -68,7 +71,9 @@ function Auctions(){
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
-          <button>Go to the Auction</button>
+          <Link to="/auction">
+            <button class="redirect">Go to the Auction</button>
+          </Link>
         </div>
       </article>
       <article>
@@ -77,7 +82,9 @@ function Auctions(){
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
-          <button>Go to the Auction</button>
+          <Link to="/auction">
+            <button class="redirect">Go to the Auction</button>
+          </Link>
         </div>
       </article>
       <article>
@@ -86,7 +93,9 @@ function Auctions(){
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
-          <button>Go to the Auction</button>
+          <Link to="/auction">
+            <button class="redirect">Go to the Auction</button>
+          </Link>
         </div>
       </article>
       <article>
@@ -95,7 +104,9 @@ function Auctions(){
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
-          <button>Go to the Auction</button>
+          <Link to="/auction">
+            <button class="redirect">Go to the Auction</button>
+          </Link>
         </div>
       </article>
       <article>
@@ -104,7 +115,9 @@ function Auctions(){
           <h3>Iphone 14</h3>
           <p> Leading offer = 500$ </p>
           <p> Ends in 14hrs </p>
-          <button>Go to the Auction</button>
+          <Link to="/auction">
+            <button class="redirect">Go to the Auction</button>
+          </Link>
         </div>
       </article>
     </div>

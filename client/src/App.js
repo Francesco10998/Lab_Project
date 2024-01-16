@@ -5,6 +5,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Settings from "./Settings";
 import MyAuctions from "./MyAuctions";
+import Auction from "./Auction";
 
 
 /*function App() {
@@ -48,6 +49,7 @@ function App(){
         <Route path="register" element={<Register/>}/>
         <Route path="settings" element={<Settings/>}/>
         <Route path="myauctions" element={<MyAuctions/>}/>
+        <Route path="auction" element={<Auction/>}/>
       </Routes>
     </BrowserRouter>
   )
