@@ -9,6 +9,7 @@ const MyAuctions = () => {
   const [password, setPassword] = useState('');
   const [data, setData] = useState(null);
   const navigate = useNavigate();
+  const [counter, setCounter] = useState(0);
 
   const Begin = async () => {
     setUsername(sessionStorage.getItem('userData'));
@@ -31,11 +32,9 @@ const MyAuctions = () => {
 
       const result = await response.json();
       setData(result);
-      if(result.results=="authenticated"){
-        console.log('ciaoooooooooooooooooooooooooooooo');
-        sessionStorage.setItem('userData',username);
-        navigate('/');
-      }
+
+      console.log(result.length);
+
     } 
     catch (error) {
       console.error('Error fetching data:', error);
@@ -43,8 +42,11 @@ const MyAuctions = () => {
   }
 
   useEffect(() =>{
-    Begin();
-  });
+    if (counter < 2) {
+      Begin();
+      setCounter(counter + 1);
+    }
+  }, [counter]);
 
 
   function Titolo(){
@@ -72,71 +74,46 @@ const MyAuctions = () => {
   )
   }
 
+  function showAuctions(){
+    var i = 0;
+    for (i;i<data.length,i++;){
+      return(
+        <div id="auction-container">
+            <div class="auction-item">
+              <img src={iphone} class="image"></img>
+              <div class="item-details">
+                <h3 class="object"></h3>
+                <p class="bet">Current Bet: $100</p>
+                <p class="deadline">Ends in 7 hrs</p>
+              </div>
+            </div>
+        </div>   
+      )
+    }
+  }
+
 
   return (<div>
       <Titolo/>
       <Navbar/>
-
       <h1 class="title">My Auctions</h1>
-
-      <div id="auction-container">
-        <div class="auction-item">
-          <img src={iphone} class="image"></img>
-          <div class="item-details">
-            <h3 class="object">Iphone 14</h3>
-            <p class="bet">Current Bet: $100</p>
-            <p class="deadline">Ends in 7 hrs</p>
-          </div>
-        </div>
-
-        <div class="auction-item">
-          <img src={iphone} class="image"></img>
-          <div class="item-details">
-            <h3 class="object">Iphone 14</h3>
-            <p class="bet">Sold at: $150</p>
-            <p class="deadline">2 Days Ago</p>
-          </div>
-        </div>
-
-        <div class="auction-item">
-          <img src={iphone} class="image"></img>
-          <div class="item-details">
-            <h3 class="object">Iphone 14</h3>
-            <p class="bet">Current Bet: $100</p>
-            <p class="deadline">Ends in 7 hrs</p>
-          </div>
-        </div>
-
-        <div class="auction-item">
-          <img src={iphone} class="image"></img>
-          <div class="item-details">
-            <h3 class="object">Iphone 14</h3>
-            <p class="bet">Sold at: $150</p>
-            <p class="deadline">2 Days Ago</p>
-          </div>
-        </div>
-
-        <div class="auction-item">
-          <img src={iphone} class="image"></img>
-          <div class="item-details">
-            <h3 class="object">Iphone 14</h3>
-            <p class="bet">Current Bet: $100</p>
-            <p class="deadline">Ends in 7 hrs</p>
-          </div>
-        </div>
-
-        <div class="auction-item">
-          <img src={iphone} class="image"></img>
-          <div class="item-details">
-            <h3 class="object">Iphone 14</h3>
-            <p class="bet">Sold at: $150</p>
-            <p class="deadline">2 Days Ago</p>
-          </div>
-        </div>
-
-      </div>
-
+      <showAuctions/>
   </div>
   )
 }
 export default MyAuctions;
+
+
+/*
+<div id="auction-container">
+            <div class="auction-item">
+              <img src={iphone} class="image"></img>
+              <div class="item-details">
+                <h3 class="object">Iphone 14</h3>
+                <p class="bet">Current Bet: $100</p>
+                <p class="deadline">Ends in 7 hrs</p>
+              </div>
+            </div>
+        </div>   
+      )
+*/
