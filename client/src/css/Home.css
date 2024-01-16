@@ -50,7 +50,7 @@ body {
 .text {
   padding: 0 20px 20px;
 }
-.text > button {
+.redirect {
   background: gray;
   border: 0;
   color: white;
