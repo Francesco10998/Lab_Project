@@ -2,54 +2,100 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
 }
 
-.container {
+#auction-container {
     display: flex;
-    justify-content: space-between;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#item-image {
+    flex: 1;
+    padding: 20px;
+    margin-top: 80px;
+}
+
+#item-details {
+    flex: 1;
     padding: 20px;
 }
 
-.left-column {
-    flex: 1;
+#first-row{
     display: flex;
-    flex-direction: column;
+    align-content: center;
+    margin-top: 20px;
 }
 
-.main-image {
-    max-width: 100%;
+#item-name {
+    font-size: 34px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#time-image{
     margin-left: 200px;
-    margin-top: -50px;
-    max-width: 400px;
-    max-height: 400px;
 }
 
-.thumbnail-images {
+#time-remaining {
+    font-size: 18px;
+    color: #ff0000;
+    margin-top: 5px;
+}
+
+#seller-name {
+    font-size: 22px;
+    margin-top: 20px;
+}
+
+#item-description {
+    font-size: 18px;
+    margin-top: 50px;
+}
+
+#leading-offer {
+    font-size: 25px;
+    margin-top: 50px;
+    margin-left: 80px;
+    font-weight: bold;
+}
+
+#current-winner {
+    font-size: 16px;
+    margin-top: 30px;
+    margin-left: 90px;
+}
+
+#offer-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#offer-row{
     display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    max-width: 200px;
-    max-height: 200px;
-    margin-right: 10px;
+    margin-top: 60px;
 }
 
-.thumbnail-image {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 5px;
+#bid-input{
+    margin-left: 30px;
+    height: 25px;
+    width: 100px;
+}
+
+#bid-button {
+    margin-left: 20px;
+    height: 30px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
     cursor: pointer;
 }
 
-.right-column {
-    flex: 1;
-    padding-left: 20px;
+#condition{
+    font-size: 16px;
+    margin-top: 30px;
 }
-
-h2, h3 {
-    margin-top: 0;
-}
-
-.timer {
-    color: red; /* colore per indicare scadenza */
-}
-
