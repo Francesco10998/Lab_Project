@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './css/Auction.css';
 import trending from "./images/trending.png"
 import iphone from "./images/iphone.jpg"
+import time from "./images/time.png"
 
 const Auction = () => {
   /*const [username, setUsername] = useState('');
@@ -40,26 +41,26 @@ const Auction = () => {
       <Titolo/>
       <Navbar/>
 
-      <div class="container">
-        <div class="left-column">
-            <div class="thumbnail-images">
-                <img class="thumbnail-image" src={iphone} alt="Thumbnail 1" onclick="changeImage('thumbnail1.jpg')"/>
-                <img class="thumbnail-image" src={iphone} alt="Thumbnail 2" onclick="changeImage('thumbnail2.jpg')"/>
-                <img class="thumbnail-image" src={iphone} alt="Thumbnail 3" onclick="changeImage('thumbnail3.jpg')"/>
-                <img class="thumbnail-image" src={iphone} alt="Thumbnail 4" onclick="changeImage('thumbnail4.jpg')"/>
-                <img class="thumbnail-image" src={iphone} alt="Thumbnail 5" onclick="changeImage('thumbnail5.jpg')"/>
-            </div>
-            <img class="main-image" src={iphone} alt="Oggetto in vendita"/>          
+      <div id="auction-container">
+        <div id="item-image">
+            <img src={iphone} alt="Item Image" height="300"/>
         </div>
-
-        <div class="right-column">
-            <h2>Seller: Nome Seller</h2>
-            <h2>Iphone 14</h2>
-            <h3>Ends in <span class="timer">XX hours</span></h3>
-            <p>Dettagli dell'oggetto...</p>
-            <p>Leading offer: 500$</p>
-            <p>Current winner: Fede11</p>
-            <p>Gestione della Bet: 10</p>
+        <div id="item-details">
+            <div id="first-row">
+              <div id="item-name">Iphone 14</div>
+              <img src={time} id="time-image" alt="Time Image" height="30"/>
+              <div id="time-remaining">Ends in: 12 hrs</div>
+            </div>
+            <div id="seller-name">Seller: Luca Masi</div>
+            <div id="item-description">Iphone 14 sealed in original box untouched, duplicate Gift.</div>
+            <div id="leading-offer">Leading Offer: 500$</div>
+            <div id="current-winner">Current Winner: Fede11</div>
+            <div id="offer-row">
+              <div id="offer-label">Make an offer:</div>
+              <input type="text" id="bid-input" placeholder="00,00 $"></input>
+              <input type="submit" id="bid-button" value="Surpass" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }} />
+            </div>
+            <div id="condition">Offer will not be accepted if it is less or equal to the leading one*</div>
         </div>
     </div>
 
