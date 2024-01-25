@@ -32,19 +32,17 @@ const Register = () => {
 
   function Navbar(){
     return (<div className="topnav">
-  <Link className="active" to="/login">Login</Link>
-  <Link to="/settings">Settings</Link>
-  <a href="#MyOffers">My Offers</a>
-  <a href="/myauctions">My Auctions</a>
-  <a href="/">Home</a>
-  
+      <Link className="active" to="/login">Login</Link>
+      <Link className="register" to="/register">Register</Link>
+      <a href="/">Home</a>
+
       <form action="/search" method="get" style={{padding:'13px'}}>
         <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
-  
-  </div>
-  )
+
+    </div>
+    )
   }
 
 
