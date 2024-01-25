@@ -28,6 +28,18 @@ body {
     color: white;
   }
 
+  .username{
+    background-color: #04AA6D;
+  }
+
+  .register{
+    background-color: #006A4E;
+  }
+
+  .logout{
+    background-color: #AA0000;
+  }
+
   .titolo {
     text-align: center;
   }
