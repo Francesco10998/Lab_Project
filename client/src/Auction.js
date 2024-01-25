@@ -26,6 +26,7 @@ const Auction = () => {
   <Link to="/settings">Settings</Link>
   <a href="#MyOffers">My Offers</a>
   <a href="/MyAuctions">My Auctions</a>
+  <a href="/">Home</a>
   
       <form action="/search" method="get" style={{padding:'13px'}}>
         <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
