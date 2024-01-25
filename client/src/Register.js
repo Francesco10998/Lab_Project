@@ -83,8 +83,10 @@ const Register = () => {
     <div>
       <Titolo/>
       <Navbar/>
-      <div className="title">
+      <div className="title" style={{margin:'auto'}}>
       <div style={{margin:'auto'}}>
+        <br />
+        <br />
         <h2>Register</h2>
         <form className='loginform' onSubmit={handleSubmit}>
           <input type="text" name="username" placeholder="Username" value={username} onChange={handleUsernameChange} required />

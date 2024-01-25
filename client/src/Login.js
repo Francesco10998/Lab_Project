@@ -85,8 +85,10 @@ const Login = () => {
     <div>
       <Titolo/>
       <Navbar/>
-      <div className="title">
-      <div class="logincontainer">
+      <div className="title" style={{margin:'auto'}}>
+      <div class="logincontainer" style={{margin:'auto'}}>
+        <br />
+        <br />
         <h2>Login</h2>
         <form className='loginform' onSubmit={handleSubmit}>
           <input type="text" name="username" placeholder="Username" value={username} onChange={handleUsernameChange} required />
