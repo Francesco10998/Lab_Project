@@ -11,6 +11,10 @@ const MyAuctions = () => {
   const navigate = useNavigate();
   const [counter, setCounter] = useState(0);
 
+  const handleLogout = () => {
+    sessionStorage.removeItem('userData');
+  };
+
   const Begin = async () => {
     setUsername(sessionStorage.getItem('userData'));
     try {
@@ -58,47 +62,45 @@ const MyAuctions = () => {
     )
   }
 
-  function Navbar(){
+  function NavbarLogged(){
     return (<div className="topnav">
-  <Link className="active" to="/login">Login</Link>
-  <Link to="/settings">Settings</Link>
-  <a href="#MyOffers">My Offers</a>
-  <a href="/myauctions">My Auctions</a>
-  <a href="/">Home</a>
-  
+      <a href="/" onClick={handleLogout} class="logout">Logout</a>
+      <a class="username">{username}</a>
+      <Link to="/settings">Settings</Link>
+      <a href="#MyOffers">My Offers</a>
+      <a href="MyAuctions">My Auctions</a>
+      <a href="/">Home</a>
+
       <form action="/search" method="get" style={{padding:'13px'}}>
         <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
-  
-  </div>
-  )
+
+    </div>
+    )
   }
 
   function showAuctions(){
-    var i = 0;
-    for (i;i<data.length,i++;){
-      return(
-        <div id="auction-container">
-            <div class="auction-item">
-              <img src={iphone} class="image"></img>
-              <div class="item-details">
-                <h3 class="object"></h3>
-                <p class="bet">Current Bet: $100</p>
-                <p class="deadline">Ends in 7 hrs</p>
-              </div>
+    return(
+      <div id="auction-container">
+          <div class="auction-item">
+            <img src={iphone} class="image"></img>
+            <div class="item-details">
+              <h3 class="object"></h3>
+              <p class="bet">Current Bet: $100</p>
+              <p class="deadline">Ends in 7 hrs</p>
             </div>
-        </div>   
-      )
-    }
+          </div>
+      </div>   
+    )
   }
 
 
   return (<div>
       <Titolo/>
-      <Navbar/>
+      <NavbarLogged/>
       <h1 class="title">My Auctions</h1>
-      <showAuctions/>
+      {showAuctions()}
   </div>
   )
 }
