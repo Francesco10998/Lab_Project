@@ -62,7 +62,7 @@ function Home() {
       <a href="/" onClick={handleLogout} class="logout">Logout</a>
       <a class="username">{user}</a>
       <Link to="/settings">Settings</Link>
-      <a href="#MyOffers">My Offers</a>
+      <a href="MyOffers">My Offers</a>
       <a href="MyAuctions">My Auctions</a>
       <a href="/">Home</a>
 

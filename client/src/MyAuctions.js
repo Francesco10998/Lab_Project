@@ -67,7 +67,7 @@ const MyAuctions = () => {
       <a href="/" onClick={handleLogout} class="logout">Logout</a>
       <a class="username">{username}</a>
       <Link to="/settings">Settings</Link>
-      <a href="#MyOffers">My Offers</a>
+      <a href="MyOffers">My Offers</a>
       <a href="MyAuctions">My Auctions</a>
       <a href="/">Home</a>
 
@@ -86,7 +86,7 @@ const MyAuctions = () => {
           <div class="auction-item">
             <img src={iphone} class="image"></img>
             <div class="item-details">
-              <h3 class="object"></h3>
+              <h3 class="object">Iphone</h3>
               <p class="bet">Current Bet: $100</p>
               <p class="deadline">Ends in 7 hrs</p>
             </div>
