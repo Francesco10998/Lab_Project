@@ -1,0 +1,24 @@
+.objectOffers {
+    display: inline-block;
+    margin-left: 0px;
+    width: 150px;
+  }
+
+.betOffers {
+display: inline-block;
+margin-left: 60px;
+width: 180px;
+}
+
+.winnerOffers {
+    display: inline-block;
+    margin-left: 80px;
+    width: 180px;
+}
+
+.deadlineOffers {
+color: red;
+display: inline-block;
+margin-left: 120px;
+width: 180px;
+}
