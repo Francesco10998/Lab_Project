@@ -24,6 +24,48 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 app.get("/", (req, res) => {
   res.json({ message: "Hello from server!" });
 });
+
+app.post("/", (req, res) => {
+  const { mode, id } = req.body;
+  console.log(req.body)
+
+  if(mode == "auctions"){
+    //Control the Auctions in the Database
+    Query = 'SELECT * FROM auctions';
+
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log(results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("Returning the User's Auction");
+          res.json(results)
+          console.log(results);
+        }
+      }
+    });
+  }
+  else{
+    Query = 'SELECT * FROM items WHERE id="'+id+'"';
+
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log(results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("Returning the User's Auction");
+          res.json(results)
+          console.log(results);
+        }
+      }
+    });
+  }
+});
+
 //------------------home page ---------------------------
 app.get("/home", (req, res) => {
   res.json({ message: "Hello from server!" });
@@ -168,8 +210,6 @@ app.post("/settings", (req, res) => {
     });
 
   }else if(mode=="modify"){/////-------------modify user parameters-------------------
-    
-    console.log(modifyParameter);
 
     if(modifyParameter=='0'){
 
