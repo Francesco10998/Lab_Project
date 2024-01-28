@@ -8,6 +8,7 @@ import 'reactjs-popup/dist/index.css';
 
 const Settings = () => {
 
+  const [errorMessage, setErrorMessage] = useState('');
   const [data, setData] = useState(null);
   const [password, setPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
@@ -74,6 +75,10 @@ const Settings = () => {
       newParameter = '2';
       console.log('telefono cambiato');
     }
+    if(event.target.id=='passwordSubmit'){
+      newParameter = '3';
+      console.log('Cambio password richiesto');
+    }
     if(event.target.id=='addressSubmit'){
       newParameter = '4';
       console.log('Indirizzo cambiato');
@@ -98,6 +103,8 @@ const Settings = () => {
           username: oldUsername,
           modifyParameter : newParameter,
           newUsername : username,
+          password: oldPassword,
+          newPassword: newPassword,
           newEmail : email,
           newAddress : address,
           newPhone :phone,
@@ -116,7 +123,16 @@ const Settings = () => {
         sessionStorage.setItem('userData',result.data_user[0]);
         setOldUsername(username);
       }
-
+      if(newParameter=='3'){
+        console.log(result.data_user[0]);
+      }
+      
+      if(result.data_user[0]==["Password mismatch"]){
+        setErrorMessage("La vecchia password inserita è errata.");
+      }
+      if(result.data_user[0]!=["Password mismatch"]){
+        setErrorMessage("Password Aggiornata.");
+      }
       
       console.log(parameter,email,result,sessionStorage.getItem('userData'));
 
@@ -241,8 +257,9 @@ const Settings = () => {
               onChange={handleNewPasswordChange}
             />
   
-            <button onClick={submitChange}>Cambia Password</button>
+            <button id="passwordSubmit"onClick={submitChange}>Cambia Password</button>
             <button onClick={closePopup}>Annulla</button>
+            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
           </div>
         </Popup>
       </div>
@@ -278,7 +295,7 @@ const Settings = () => {
         <div class="form-group">
           <label class="label" for="password">Password:</label>
           <input type="password" value={password} style={{width:'300px'}} id="password" name="password" required />
-          <button type="submit" class="button" id="passwordSubmit"onClick={openPopup}>Change</button>
+          <button type="submit" class="button" onClick={openPopup}>Change</button>
         </div>
 
         {Popupper()}
