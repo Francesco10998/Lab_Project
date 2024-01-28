@@ -201,8 +201,8 @@ app.post("/register", (req, res) => {
 //----------------- enter settings page ------------------------
 app.post("/settings", (req, res) => {
 
-  let{mode,username,modifyParameter,newUsername,newEmail,newAddress,newPhone,newPayment}= req.body;
-  console.log(mode,username,modifyParameter);
+  let{mode,username,modifyParameter,newUsername,password,newPassword,newEmail,newAddress,newPhone,newPayment}= req.body;
+  console.log(mode,username,password,newPassword,modifyParameter);
 
   //------when open setting return all the data react will put on the placeholder--------//
   if(mode=="enter"){
@@ -227,6 +227,8 @@ app.post("/settings", (req, res) => {
     });
 
   }else if(mode=="modify"){/////-------------modify user parameters-------------------
+    
+    console.log(modifyParameter);
 
     if(modifyParameter=='0'){
 
@@ -315,23 +317,6 @@ app.post("/settings", (req, res) => {
         }
       });
     }
-    if(modifyParameter=='4'){
-      QueryModifyAddress = "UPDATE users SET address = '" + newAddress + "' WHERE username = '" + username + "'";
-      //execute query
-      utils.pool.query(QueryModifyAddress, function (error, results, fields) {
-        if (error){
-          res.status(500).json({ "data_user": ["server error"] });
-          throw error;
-        }
-        if (results.length !== 0) {
-          console.log(results);
-          res.json({ "data_user": ["Address modified"] });
-        } else {
-          console.log("Address not modified");
-          res.json({ "data_user": ["Address not modified"] });
-        }
-      });
-    }
     if(modifyParameter=='2'){
       QueryModifyPhone = "UPDATE users SET phoneNumber = '" + newPhone + "' WHERE username = '" + username + "'";
       //execute query
@@ -349,6 +334,63 @@ app.post("/settings", (req, res) => {
         }
       });
     }
+    if(modifyParameter=='3'){
+      const cryptoNew = utils.sha256(String(newPassword))
+      const cryptoOld = utils.sha256(String(password))
+      
+
+      //check password AOOOOOOOOOOOOOOOOOOOOOO
+
+      QueryExist = "SELECT username,pass FROM users WHERE username = '"+username+"'";
+      utils.pool.query(QueryExist, function (error, results, fields) {
+        if (error){
+          res.status(500).json({ "data_user": ["server error"] });
+          throw error;
+        }
+        if (results.length !== 0) {
+          console.log(results[0].pass,cryptoOld,cryptoNew);
+          if(results[0].pass==cryptoOld){
+            QueryModifyPassword = "UPDATE users SET pass = '" + cryptoNew + "' WHERE username = '" + username + "'";
+            utils.pool.query(QueryModifyPassword, function (error, results, fields) {
+              if (error){
+                res.status(500).json({ "data_user": ["server error"] });
+                throw error;
+              }
+              if (results.length !== 0) {
+                console.log(results);
+                res.json({ "data_user": ["Password updated"] });
+              } else {
+                console.log("Address not modified");
+                res.json({ "data_user": ["Password updated"] });
+              }
+            });
+        } else {
+          console.log("Password mismatch");
+          res.json({ "data_user": ["Password mismatch"] });
+        }
+        }
+      });
+      //check password AOOOOOOOOOOOOOOOOOOOOOO
+    }
+    
+    if(modifyParameter=='4'){
+      QueryModifyAddress = "UPDATE users SET address = '" + newAddress + "' WHERE username = '" + username + "'";
+      //execute query
+      utils.pool.query(QueryModifyAddress, function (error, results, fields) {
+        if (error){
+          res.status(500).json({ "data_user": ["server error"] });
+          throw error;
+        }
+        if (results.length !== 0) {
+          console.log(results);
+          res.json({ "data_user": ["Address modified"] });
+        } else {
+          console.log("Address not modified");
+          res.json({ "data_user": ["Address not modified"] });
+        }
+      });
+    }
+
     if(modifyParameter=='5'){
       QueryModifyPayment = "UPDATE users SET paymentMethod = '"+newPayment+"'WHERE username = '"+username+"'";
       //execute query
