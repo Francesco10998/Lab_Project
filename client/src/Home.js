@@ -13,6 +13,12 @@ function Home() {
 
   const [auctions, setAuctions] = useState('');
 
+  //const [counter, setCounter] = useState(0);
+
+  const [item, setItem] = useState('');
+
+  const [array, setArray] = useState([]);
+
   function getDeadline(finish){
     const options = {
         timeZone: 'Europe/Rome', 
@@ -33,7 +39,7 @@ function Home() {
     return [remainingDays, remainingHours, remainingMinutes, remainingSeconds];
   }
 
-
+  //Function that asks the auctions to server
   const getAuctions = async () => {
     try {
       const response = await fetch('/', {
@@ -44,7 +50,7 @@ function Home() {
           // Add other headers if necessary
         },
         body: JSON.stringify({
-          username: user,
+          mode: "auctions"
         }),
       });
 
@@ -53,21 +59,98 @@ function Home() {
       }
 
       const result = await response.json();
-      console.log(result)
+      console.log(result);
       setAuctions(result);
+      return await(result);
     } 
     catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
+  
+  //Function that asks for the elements of a certain item to server
+  const getItem = async (id) => {
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://localhost:8000',
+          // Add other headers if necessary
+        },
+        body: JSON.stringify({
+          mode: "item",
+          id: id
+        }),
+      });
 
-
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      const result = await response.json();
+      console.log("PAZZO"+result[0].name);
+      //setItem(result[0].name);
+      return result;
+    } 
+    catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   useEffect(() => {
+      setUser(sessionStorage.getItem('userData'));
+      const fetchData = async () => {
+        try {
+          const auctionsResult = await getAuctions();
+
+          // Esegui qualcosa con la risposta di getAuctions
+          console.log('Risposta di getAuctions:', auctionsResult);
+
+          /*for (let i = 0; i < 6; i++) {
+            try{
+              const itemResult = await getItem(auctionsResult[i].auctionId);
+              if (!array.includes(itemResult)) {
+                array.push(itemResult);
+                array.forEach((item, index) => {
+                  console.log(`AHOElemento ${index + 1}:`, item);
+                });
+              }            
+            }
+            catch (error) {
+              console.error('Errore durante il recupero degli Item:', error);
+            }
+          }*/
+          const itemPromises = auctionsResult.slice(0, 6).map((auction) => getItem(auction.auctionId));
+
+          const item = await Promise.all(itemPromises);
+          
+          setItem(item);
+        } 
+        catch (error) {
+          console.error('Errore durante il recupero delle aste:', error);
+        }
+      };
+
+      fetchData();
+  }, []); 
+
+  
+  /*useEffect(() => {
+    setUser(sessionStorage.getItem('userData'));
+    (async () => {
+      const result = await getAuctions();
+      console.log("IUTO"+auctions);
+      setAuctions(result);
+      setItem(result[0].auctionId);
+      getItem();
+    })();
+  }, []); */
+  /*useEffect(() => {
     setUser(sessionStorage.getItem('userData'));
     getAuctions();
-  }, []); 
+  }, []); */
+
 
   const handleLogout = () => {
     sessionStorage.removeItem('userData');
@@ -134,29 +217,37 @@ function Home() {
   function Auctions() {
     const [articles, setArticles] = useState([]);
 
-  useEffect(() => {
-    const updateDeadlines = () => {
-      if (auctions && auctions.length > 0) {
-        const updatedArticles = auctions.map((auction) => {
-          const deadline = getDeadline(auction.finishingTime);
-          return {
-            title: 'Iphone 14',
-            leadingOffer: auction.bet,
-            endsIn: [deadline[0], deadline[1], deadline[2], deadline[3]],
-          };
-        });
-        setArticles(updatedArticles);
-      }
-    };
+    useEffect(() => {
+      const updateDeadlines = () => {
+        /*if (itemResult && itemResult.length > 0) {
+          const updatedNamess = itemResult.map((item) => {
+            return {
+              name: item
+            };
+          });
+        }*/
+        
+        if (auctions && auctions.length > 0) {
+          const updatedArticles = auctions.map((auction, index) => {
+            const item2 = item[index];
+            const deadline = getDeadline(auction.finishingTime);
+            return {
+              title: item2[0].name,
+              leadingOffer: auction.bet,
+              endsIn: [deadline[0], deadline[1], deadline[2], deadline[3]],
+            };
+          });
+          setArticles(updatedArticles);
+        }
+      };
 
-    // Set an interval to update deadlines every second
-    const updateInterval = setInterval(updateDeadlines, 1000);
+      // Set an interval to update deadlines every second
+      const updateInterval = setInterval(updateDeadlines, 1000);
 
-    // Cleanup the interval when the component unmounts
-    return () => clearInterval(updateInterval);
-  }, [auctions]);
+      // Cleanup the interval when the component unmounts
+      return () => clearInterval(updateInterval);
+    }, [auctions]);
     
-  
     return (
       <div style={{ padding: '15px' }}>
         <a href="Login.html" style={{ display: 'flex', width: '170px' }}>
@@ -166,7 +257,7 @@ function Home() {
         <br></br>
         <div className="grid">
           {articles.map((article, index) => (
-            <article key={index}>
+            <article key={article.title}>
               <img src={iphone} alt={`Article ${index + 1}`} />
               <div className="text" style={{ textAlign: 'center' }}>
                 <h3>{article.title}</h3>
