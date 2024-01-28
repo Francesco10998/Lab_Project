@@ -53,6 +53,10 @@ const Settings = () => {
     setEmail(event.target.value);
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem('userData');
+  };
+
   const submitChange = async (event) => {
 
 
@@ -144,20 +148,22 @@ const Settings = () => {
     )
   }
 
-  function Navbar(){
+  function NavbarLogged(){
     return (<div className="topnav">
-  <Link className="active" to="/login">Login</Link>
-  <Link to="/settings">Settings</Link>
-  <a href="#MyOffers">My Offers</a>
-  <Link to="/myauctions">My Auctions</Link>
-  
+      <a href="/" onClick={handleLogout} class="logout">Logout</a>
+      <a class="username">{username}</a>
+      <Link to="/settings">Settings</Link>
+      <a href="MyOffers">My Offers</a>
+      <a href="MyAuctions">My Auctions</a>
+      <a href="/">Home</a>
+
       <form action="/search" method="get" style={{padding:'13px'}}>
         <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
-  
-  </div>
-  )
+
+    </div>
+    )
   }
 
   const Display = async () => {
@@ -246,7 +252,7 @@ const Settings = () => {
 
   return (<div>
       <Titolo/>
-      <Navbar/>
+      <NavbarLogged/>
 
       <div class="form-container">
         <h1>Profile Info</h1>
