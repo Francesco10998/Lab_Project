@@ -168,9 +168,10 @@ app.post("/settings", (req, res) => {
     });
 
   }else if(mode=="modify"){/////-------------modify user parameters-------------------
-
     
-    if(modifyParameter='0'){
+    console.log(modifyParameter);
+
+    if(modifyParameter=='0'){
 
       QueryExistUsername = "SELECT * FROM users WHERE username = '"+newUsername+"'";
       utils.pool.query(QueryExistUsername, function (error, results, fields) {
@@ -180,7 +181,7 @@ app.post("/settings", (req, res) => {
         }
         if (results.length !== 0) {
           console.log(results);
-          res.json({ "data_user": ["Username already exists"] });
+          res.json({ "data_user": [username] });
         } else {
           QueryModifyUsername = "UPDATE users SET username = '"+newUsername+"'WHERE username = '"+username+"'";
           //execute query
@@ -191,10 +192,10 @@ app.post("/settings", (req, res) => {
             }
             if (results.length !== 0) {
               console.log(results);
-              res.json({ "data_user": ["Username modified"] });
+              res.json({ "data_user": [newUsername] });
             } else {
               console.log("Username not modified");
-              res.json({ "data_user": ["Username not modified"] });
+              res.json({ "data_user": [username] });
             }
           });
         }
