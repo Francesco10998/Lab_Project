@@ -47,8 +47,25 @@ app.post("/", (req, res) => {
       }
     });
   }
-  else{
+  else if(mode == "item"){
     Query = 'SELECT * FROM items WHERE id="'+id+'"';
+
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log(results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("Returning the User's Auction");
+          res.json(results)
+          console.log(results);
+        }
+      }
+    });
+  }
+  else if(mode == "auction"){
+    Query = "SELECT * FROM auctions WHERE auctionId='"+id+"'";
 
     //Execute Query
     utils.pool.query(Query, function (error, results, fields) {
