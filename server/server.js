@@ -31,7 +31,18 @@ app.post("/", (req, res) => {
 
   if(mode == "auctions"){
     //Control the Auctions in the Database
-    Query = 'SELECT * FROM auctions';
+    //Query = 'SELECT * FROM auctions';
+
+    const options = {
+      timeZone: 'Europe/Rome', 
+      hour12: false,
+    };
+    const data = new Date().toLocaleString('en-US', options);
+
+    //Query = 'SELECT * FROM auctions ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE('+data+', "%m/%d/%Y, %H:%i:%s"))) LIMIT 6'
+    Query = "SELECT * FROM auctions ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE('"+data+"', '%m/%d/%Y, %H:%i:%s'))) LIMIT 6";
+
+    console.log("QUERY "+Query);
 
     //Execute Query
     utils.pool.query(Query, function (error, results, fields) {
