@@ -3,20 +3,47 @@ import React, { useEffect,useState } from 'react';
 import './css/Settings.css';
 import trending from "./images/trending.png"
 import card from "./images/Card.png"
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 const Settings = () => {
 
   const [data, setData] = useState(null);
   const [password, setPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [pay, setPay] = useState('');
   const [username, setUsername] = useState('');
+  const [oldUsername, setOldUsername] = useState('');
   const [mode,setMode] = useState('');
   const [parameter, setParameter] = useState('');
   const [counter, setCounter] = useState(0);
   let newParameter ='1';
+
+  const [isPopupVisible, setPopupVisibility] = useState(false);
+
+  const openPopup = () => {
+    setPopupVisibility(true);
+  };
+
+  const closePopup = () => {
+    setPopupVisibility(false);
+  };
+
+
+  const handleOldPasswordChange = (e) => {
+    console.log("Old Password Change:", e.target.value);
+    setOldPassword(e.target.value);
+  };
+  
+  const handleNewPasswordChange = (e) => {
+    console.log("New Password Change:", e.target.value);
+    setNewPassword(e.target.value);
+  };
+
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -27,6 +54,7 @@ const Settings = () => {
   };
 
   const submitChange = async (event) => {
+
 
     const newMode = 'modify';
 
@@ -63,7 +91,7 @@ const Settings = () => {
         },
         body: JSON.stringify({
           mode : newMode,
-          username: username,
+          username: oldUsername,
           modifyParameter : newParameter,
           newUsername : username,
           newEmail : email,
@@ -79,7 +107,14 @@ const Settings = () => {
       }
 
       const result = await response.json();
-      console.log(parameter,email,result);
+
+      if(newParameter=='0'){
+        sessionStorage.setItem('userData',result.data_user[0]);
+        setOldUsername(username);
+      }
+
+      
+      console.log(parameter,email,result,sessionStorage.getItem('userData'));
 
     } 
     catch (error) {
@@ -129,7 +164,8 @@ const Settings = () => {
 
     console.log(mode,username);
     setUsername(sessionStorage.getItem('userData'));
-    
+    setOldUsername(sessionStorage.getItem('userData'));
+
 
     try {
       const response = await fetch('/settings', {
@@ -173,6 +209,40 @@ const Settings = () => {
     }
   }, [counter]);
 
+  function Popupper(){
+    return (
+      <div>
+        <Popup
+          open={isPopupVisible}
+          onClose={closePopup}
+          modal
+          closeOnDocumentClick
+        >
+          <div>
+            <label htmlFor="oldPassword">Vecchia Password:</label>
+            <input
+              type="password"
+              id="oldPassword"
+              value={oldPassword}
+              onChange={handleOldPasswordChange}
+            />
+  
+            <label htmlFor="newPassword">Nuova Password:</label>
+            <input
+              type="password"
+              id="newPassword"
+              value={newPassword}
+              onChange={handleNewPasswordChange}
+            />
+  
+            <button onClick={submitChange}>Cambia Password</button>
+            <button onClick={closePopup}>Annulla</button>
+          </div>
+        </Popup>
+      </div>
+    );
+  };
+
 
   return (<div>
       <Titolo/>
@@ -202,8 +272,10 @@ const Settings = () => {
         <div class="form-group">
           <label class="label" for="password">Password:</label>
           <input type="password" value={password} style={{width:'300px'}} id="password" name="password" required />
-          <button type="submit" class="button" id="passwordSubmit"onClick={submitChange}>Change</button>
+          <button type="submit" class="button" id="passwordSubmit"onClick={openPopup}>Change</button>
         </div>
+
+        {Popupper()}
 
         <div class="form-group">
           <label class="label" for="address">Address:</label>
