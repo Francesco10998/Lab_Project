@@ -37,11 +37,11 @@ body {
 }
 
 #time-image{
-    margin-left: 200px;
+    margin-left: 150px;
 }
 
 #time-remaining {
-    font-size: 18px;
+    font-size: 16px;
     color: #ff0000;
     margin-top: 5px;
 }
