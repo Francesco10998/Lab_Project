@@ -89,7 +89,6 @@ function Home() {
         throw new Error('Network response was not ok.');
       }
       const result = await response.json();
-      console.log("PAZZO"+result[0].name);
       //setItem(result[0].name);
       return result;
     } 
@@ -235,6 +234,7 @@ function Home() {
               title: item2[0].name,
               leadingOffer: auction.bet,
               endsIn: [deadline[0], deadline[1], deadline[2], deadline[3]],
+              url: `/auction/${auction.auctionId}`
             };
           });
           setArticles(updatedArticles);
@@ -263,7 +263,7 @@ function Home() {
                 <h3>{article.title}</h3>
                 <p class="leadingHome">Leading offer = ${article.leadingOffer}</p>
                 <p class="deadlineHome">Ends in {article.endsIn[0]} Days, {article.endsIn[1]} Hours, {article.endsIn[2]} Minutes, {article.endsIn[3]} Seconds</p>
-                <Link to="/auction">
+                <Link to={article.url}>
                   <button className="redirect">Go to the Auction</button>
                 </Link>
               </div>

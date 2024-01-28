@@ -51,7 +51,7 @@ function App(){
         <Route path="settings" element={<Settings/>}/>
         <Route path="myauctions" element={<MyAuctions/>}/>
         <Route path="myoffers" element={<MyOffers/>}/>
-        <Route path="auction" element={<Auction/>}/>
+        <Route path="/auction/:auctionId" element={<Auction />} />
       </Routes>
     </BrowserRouter>
   )
