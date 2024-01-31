@@ -36,6 +36,8 @@ const Auction = () => {
 
   const [item, setItem] = useState('');
 
+  const [image, setImage] = useState('');
+
   //Function that asks the auctions to server
   const getAuctions = async (id) => {
     try {
@@ -109,6 +111,14 @@ const Auction = () => {
         console.log('Risposta di getItems:', item);
         
         setItem(item);
+
+        //Managing of image
+        const uint8Array = new Uint8Array(item[0][0].image.data);
+        // Convert the Uint8Array to a Blob
+        const blob = new Blob([uint8Array]);
+        // Create a data URL using the Blob
+        const imageUrl = URL.createObjectURL(blob);
+        setImage(imageUrl);
       } 
       catch (error) {
         console.error('Errore durante il recupero delle aste:', error);
@@ -189,6 +199,7 @@ const Auction = () => {
           const updatedTimes = auctions.map((auction) => {
             const deadline = getDeadline(auction.finishingTime);
             const isDeadlinePassed = (deadline[0] < 0) || (deadline[1] < 0)|| (deadline[2] < 0) || (deadline[3] < 0);
+
             return {
               endsIn: [deadline[0], deadline[1], deadline[2], deadline[3]],
               isPassed: isDeadlinePassed
@@ -209,7 +220,9 @@ const Auction = () => {
       {auctions && auctions.length > 0 && auctions.map((auction) => (
         <div id="auction-container">
           <div id="item-image">
-              <img src={iphone} alt="Item Image" height="300"/>
+            {image && image.length > 0 && (
+              <img src={image} alt="Item Image" height="300"/>
+            )}
           </div>
           <div id="item-details">
               <div id="first-row">

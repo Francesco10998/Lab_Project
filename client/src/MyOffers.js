@@ -198,13 +198,22 @@ const MyOffers = () => {
             const item2 = item[index];
             const deadline = getDeadline(auction.finishingTime);
             const isDeadlinePassed = (deadline[0] < 0) || (deadline[1] < 0)|| (deadline[2] < 0) || (deadline[3] < 0);
+            
+            //Managing of image
+            const uint8Array = new Uint8Array(item2[0].image.data);
+            // Convert the Uint8Array to a Blob
+            const blob = new Blob([uint8Array]);
+            // Create a data URL using the Blob
+            const imageUrl = URL.createObjectURL(blob);
+            
             return {
               title: item2[0].name,
               leadingOffer: auction.bet,
               endsIn: [deadline[0], deadline[1], deadline[2], deadline[3]],
               url: `/auction/${auction.auctionId}`,
               isPassed: isDeadlinePassed,
-              currentWinner: auction.currentWinner
+              currentWinner: auction.currentWinner,
+              image: imageUrl
             };
           });
           setArticles(updatedArticles);
@@ -223,7 +232,7 @@ const MyOffers = () => {
         {articles.map((article, index) => (
         <div id="auction-container">
           <div class="auction-item">
-            <img src={iphone} class="image"></img>
+            <img src={article.image} class="image"></img>
             <div class="item-details">
               <h3 class="objectOffers">{article.title}</h3>
               {article.isPassed ? (
