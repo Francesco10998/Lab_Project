@@ -17,11 +17,11 @@ body {
 
   .auction-item {
     display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #ccc;
-      padding: 20px; /* Regola il padding per le righe */
-      margin: 10px 0; /* Regola il margine per le righe */
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 20px; 
+    margin: 0px 0; 
   }
 
   .auction-item img {
@@ -49,8 +49,19 @@ body {
   .deadline {
     color: red;
     display: inline-block;
-    margin-left: 280px;
-    width: 150px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin-left: 70px;
+    width: 200px;
+  }
+
+  .redirectButton {
+    margin-left: 80px;
+    background: gray;
+    border: 0;
+    color: white;
+    height: 30px;
   }
 
   .image {
