@@ -39,7 +39,7 @@ app.post("/", (req, res) => {
     };
     const data = new Date().toLocaleString('en-US', options);
 
-    Query = "SELECT * FROM auctions ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE('"+data+"', '%m/%d/%Y, %H:%i:%s'))) LIMIT 6";
+    Query = "SELECT * FROM auctions WHERE finishingTime > STR_TO_DATE('"+data+"', '%m/%d/%Y, %H:%i:%s') ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE('"+data+"', '%m/%d/%Y, %H:%i:%s'))) LIMIT 6";
 
     console.log("QUERY "+Query);
 
@@ -74,24 +74,8 @@ app.post("/", (req, res) => {
       }
     });
   }
-  else if(mode == "auction"){
-    Query = "SELECT * FROM auctions WHERE auctionId='"+id+"'";
-
-    //Execute Query
-    utils.pool.query(Query, function (error, results, fields) {
-      if (error) throw error;
-      else{
-        //console.log(results);
-        //console.log(results.length);
-        if(results.length!=0){
-          console.log("Returning the User's Auction");
-          res.json(results)
-          console.log(results);
-        }
-      }
-    });
-  }
 });
+
 
 //------------------home page ---------------------------
 app.get("/home", (req, res) => {
@@ -431,27 +415,79 @@ app.get("/myoffers", (req, res) => {
 
 //---------------- myauctions page ------------------------
 app.post("/myauctions", (req, res) => {
-  const { username } = req.body;
+  const { mode, user, id } = req.body;
 
-  //Control the Auction of the User in the Database
-  QueryUsername = 'SELECT * FROM auctions WHERE creatorUsername="' + username + '"';
+  if(mode == "auctions"){
+    //Control the Auctions in the Database
+    //Query = 'SELECT * FROM auctions';
 
-  //execute query
-  utils.pool.query(QueryUsername, function (error, results, fields) {
-    if (error) throw error;
-    else{
-      console.log(results);
-      console.log(results.length);
-      if(results.length!=0){
-        console.log("Returning the User's Auction");
-        res.json(results)
+    const options = {
+      timeZone: 'Europe/Rome', 
+      hour12: false,
+    };
+    const data = new Date().toLocaleString('en-US', options);
+
+    Query = "SELECT * FROM auctions WHERE creatorUsername='"+user+"' ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE('"+data+"', '%m/%d/%Y, %H:%i:%s')))";
+
+    console.log("QUERY "+Query);
+
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log(results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("Returning the User's Auction");
+          res.json(results)
+          console.log(results);
+        }
       }
-    }
-  });
+    });
+  }
+  else if(mode == "item"){
+    Query = 'SELECT * FROM items WHERE id="'+id+'"';
 
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log(results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("Returning the User's Auction");
+          res.json(results)
+          console.log(results);
+        }
+      }
+    });
+  }
+  
 });
 
 
+//---------------- auction page ------------------------
+app.post("/auction", (req, res) => {
+  const { mode, id } = req.body;
+
+  if(mode == "auction"){
+    Query = "SELECT * FROM auctions WHERE auctionId='"+id+"'";
+
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log(results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("Returning the User's Auction");
+          res.json(results)
+          console.log(results);
+        }
+      }
+    });
+  }
+});
 
 
 
