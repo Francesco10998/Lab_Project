@@ -409,8 +409,52 @@ app.post("/settings", (req, res) => {
 
 
 //----------------- myoffers page -------------------------
-app.get("/myoffers", (req, res) => {
-  res.json({ "users": ["userOne","userTwo", "userThree"] });
+app.post("/myoffers", (req, res) => {
+  const { mode, user, id } = req.body;
+
+  if(mode == "auctions"){
+
+    const options = {
+      timeZone: 'Europe/Rome', 
+      hour12: false,
+    };
+    const data = new Date().toLocaleString('en-US', options);
+
+    Query = "SELECT * FROM auctions WHERE FIND_IN_SET('"+user+"', participants) > 0 ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE('"+data+"', '%m/%d/%Y, %H:%i:%s')))";
+
+    console.log("QUERY "+Query);
+
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log("OFFER "+results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("Returning the User's Auction");
+          res.json(results)
+          console.log(results);
+        }
+      }
+    });
+  }
+  else if(mode == "item"){
+    Query = 'SELECT * FROM items WHERE id="'+id+'"';
+
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log(results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("Returning the User's Auction");
+          res.json(results)
+          console.log(results);
+        }
+      }
+    });
+  }
 });
 
 //---------------- myauctions page ------------------------
@@ -462,7 +506,6 @@ app.post("/myauctions", (req, res) => {
       }
     });
   }
-  
 });
 
 
@@ -489,6 +532,30 @@ app.post("/auction", (req, res) => {
   }
 });
 
+//This part is used for adding an image to DB
+/*const fs = require('fs');
+
+// Inserisci un nuovo utente con immagine
+const image1Path = '../client/src/images/iphone.jpg';
+const image1Content = fs.readFileSync(image1Path);
+
+// Converti l'immagine in formato base64
+//const image1Base64 = Buffer.from(image1Content).toString('base64');
+//console.log(image1Base64);
+
+const query1 = 'UPDATE items SET image = ?';
+
+//execute query
+utils.pool.query(query1, [image1Content], function (error, results, fields) {
+  if (error) throw error;
+  else{
+    console.log(results);
+    console.log(results.length);
+    if(results.length!=0){
+      console.log("Returning the User's Auction");
+    }
+  }
+});*/
 
 
 app.listen(PORT, () => {
