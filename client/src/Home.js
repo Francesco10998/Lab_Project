@@ -230,11 +230,20 @@ function Home() {
           const updatedArticles = auctions.map((auction, index) => {
             const item2 = item[index];
             const deadline = getDeadline(auction.finishingTime);
+
+            //Managing of image
+            const uint8Array = new Uint8Array(item2[0].image.data);
+            // Convert the Uint8Array to a Blob
+            const blob = new Blob([uint8Array]);
+            // Create a data URL using the Blob
+            const imageUrl = URL.createObjectURL(blob);
+
             return {
               title: item2[0].name,
               leadingOffer: auction.bet,
               endsIn: [deadline[0], deadline[1], deadline[2], deadline[3]],
-              url: `/auction/${auction.auctionId}`
+              url: `/auction/${auction.auctionId}`,
+              image: imageUrl
             };
           });
           setArticles(updatedArticles);
@@ -258,7 +267,7 @@ function Home() {
         <div className="grid">
           {articles.map((article, index) => (
             <article key={article.title}>
-              <img src={iphone} alt={`Article ${index + 1}`} />
+              <img src={article.image} alt={`Article ${index + 1}`} />
               <div className="text" style={{ textAlign: 'center' }}>
                 <h3>{article.title}</h3>
                 <p class="leadingHome">Leading offer = ${article.leadingOffer}</p>
@@ -273,89 +282,7 @@ function Home() {
       </div>
     );
   }
-  
 
-  /*function Auctions(){
-    return(
-      <div style={{padding:'15px'}}>
-        <a href="Login.html" style={{display: 'flex', width:'170px'}}>
-          <button style={{borderRadius:'10px'}}>Create a new Auction</button>
-          <img src={plus} style={{ width:'20px' , height:'20px'}}></img>
-        </a>
-      <br></br>
-      <div className="grid">
-        <article>
-          <img src={iphone} />
-          <div className="text" style={{ textAlign: 'center' }} >
-            <h3>Iphone 14</h3>
-            <p> Leading offer = 500$ </p>
-            <p> Ends in 14hrs </p>
-            <Link to="/auction">
-              <button class="redirect">Go to the Auction</button>
-            </Link>
-
-          </div>
-        </article>
-        <article>
-        <img src={iphone} ></img>
-          <div className="text" style={{ textAlign: 'center' }} >
-            <h3>Iphone 14</h3>
-            <p> Leading offer = 500$ </p>
-            <p> Ends in 14hrs </p>
-            <Link to="/auction">
-              <button class="redirect">Go to the Auction</button>
-            </Link>
-          </div>
-        </article>
-        <article>
-        <img src={iphone} ></img>
-          <div className="text" style={{ textAlign: 'center' }} >
-            <h3>Iphone 14</h3>
-            <p> Leading offer = 500$ </p>
-            <p> Ends in 14hrs </p>
-            <Link to="/auction">
-              <button class="redirect">Go to the Auction</button>
-            </Link>
-          </div>
-        </article>
-        <article>
-        <img src={iphone} ></img>
-          <div className="text" style={{ textAlign: 'center' }} >
-            <h3>Iphone 14</h3>
-            <p> Leading offer = 500$ </p>
-            <p> Ends in 14hrs </p>
-            <Link to="/auction">
-              <button class="redirect">Go to the Auction</button>
-            </Link>
-          </div>
-        </article>
-        <article>
-        <img src={iphone} ></img>
-          <div className="text" style={{ textAlign: 'center' }} >
-            <h3>Iphone 14</h3>
-            <p> Leading offer = 500$ </p>
-            <p> Ends in 14hrs </p>
-            <Link to="/auction">
-              <button class="redirect">Go to the Auction</button>
-            </Link>
-          </div>
-        </article>
-        <article>
-        <img src={iphone} ></img>
-          <div className="text" style={{ textAlign: 'center' }} >
-            <h3>Iphone 14</h3>
-            <p> Leading offer = 500$ </p>
-            <p> Ends in 14hrs </p>
-            <Link to="/auction">
-              <button class="redirect">Go to the Auction</button>
-            </Link>
-          </div>
-        </article>
-      </div>
-      </div>
-    )
-  }*/
-
-}  
+}
 
 export default Home;

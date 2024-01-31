@@ -188,8 +188,10 @@ const Auction = () => {
         if (auctions && auctions.length > 0 && item && item.length > 0) {
           const updatedTimes = auctions.map((auction) => {
             const deadline = getDeadline(auction.finishingTime);
+            const isDeadlinePassed = (deadline[0] < 0) || (deadline[1] < 0)|| (deadline[2] < 0) || (deadline[3] < 0);
             return {
-              endsIn: [deadline[0], deadline[1], deadline[2], deadline[3]]
+              endsIn: [deadline[0], deadline[1], deadline[2], deadline[3]],
+              isPassed: isDeadlinePassed
             };
           });
           setTimes(updatedTimes);
@@ -212,25 +214,48 @@ const Auction = () => {
           <div id="item-details">
               <div id="first-row">
                 {item && item.length > 0 && item.map((it) => (
-                <div id="item-name">{it[0].name}</div>
+                    <div id="item-name">{it[0].name}</div>
                 ))}
                 <img src={time} id="time-image" alt="Time Image" height="40"/>
-                {times && times.length > 0 && times.map((time) => (
-                <div id="time-remaining">Ends in {time.endsIn[0]} Days, {time.endsIn[1]} Hours, {time.endsIn[2]} Minutes, {time.endsIn[3]} Seconds</div>
-                ))}
+                {times && times.length > 0 && times.map((time) => {
+                  if (time.isPassed && time.endsIn[0] === 0) {
+                    return <p id="time-remaining">Finished Today</p>;
+                  } else if (time.isPassed && time.endsIn[0] === -1) {
+                    return <p id="time-remaining">Finished Yesterday</p>;
+                  } else if (time.isPassed) {
+                    return <p id="time-remaining">Finished {-time.endsIn[0]} Days Ago</p>;
+                  } else {
+                    return (
+                      <p key={time.id} id="time-remaining">
+                        Ends in {time.endsIn[0]} Days, {time.endsIn[1]} Hours, {time.endsIn[2]} Minutes, {time.endsIn[3]} Seconds
+                      </p>
+                    );
+                  }
+                })}
               </div>
               <div id="seller-name">Seller: {auction.creatorUsername}</div>
               {item && item.length > 0 && item.map((it) => (
-              <div id="item-description">{it[0].description}</div>
+                <div id="item-description">{it[0].description}</div>
               ))}
-              <div id="leading-offer">Leading Offer: ${auction.bet}</div>
-              <div id="current-winner">Current Winner: {auction.currentWinner}</div>
-              <div id="offer-row">
-                <div id="offer-label">Make an offer:</div>
-                <input type="text" id="bid-input" placeholder="00,00 $"></input>
-                <input type="submit" id="bid-button" value="Surpass" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }} />
-              </div>
-              <div id="condition">Offer will not be accepted if it is less or equal to the leading one*</div>
+              {times && times.length > 0 && times.map((time) => {
+                if (!time.isPassed){
+                  return(
+                    <div>
+                      <div id="leading-offer">Leading Offer: ${auction.bet}</div>
+                      <div id="current-winner">Current Winner: {auction.currentWinner}</div>
+                      <div id="offer-row">
+                        <div id="offer-label">Make an offer:</div>
+                        <input type="text" id="bid-input" placeholder="00,00 $"></input>
+                        <input type="submit" id="bid-button" value="Surpass" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }} />
+                      </div>
+                      <div id="condition">Offer will not be accepted if it is less or equal to the leading one*</div>
+                    </div>
+                  )
+                }
+                else{
+                  return <div id="leading-offer">Leading Offer: ${auction.bet}</div>
+                }
+              })}
           </div>
       </div>
       ))}
