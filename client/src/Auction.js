@@ -39,7 +39,7 @@ const Auction = () => {
   //Function that asks the auctions to server
   const getAuctions = async (id) => {
     try {
-      const response = await fetch('/', {
+      const response = await fetch('/auction', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ const Auction = () => {
       <a class="username">{user}</a>
       <Link to="/settings">Settings</Link>
       <a href="MyOffers">My Offers</a>
-      <a href="MyAuctions">My Auctions</a>
+      <Link to="/myauctions">My Auctions</Link>
       <a href="/">Home</a>
 
       <form action="/search" method="get" style={{padding:'13px'}}>
