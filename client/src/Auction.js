@@ -4,6 +4,7 @@ import './css/Auction.css';
 import trending from "./images/trending.png"
 import iphone from "./images/iphone.jpg"
 import time from "./images/time.png"
+import victory from "./images/victory.jpg"
 import { useParams } from 'react-router-dom';
 import { differenceInMinutes, differenceInHours, differenceInDays, differenceInSeconds } from 'date-fns';
 
@@ -266,7 +267,15 @@ const Auction = () => {
                   )
                 }
                 else{
-                  return <div id="leading-offer">Leading Offer: ${auction.bet}</div>
+                  return(
+                    <div>
+                      <div id="winner-row">
+                        <img src={victory} id="victory-image" alt="Victory Image" height="100"/>
+                        <div id="leading-offer" style={{marginLeft: '0px'}}>{auction.currentWinner} won the auction for ${auction.bet}</div>
+                      </div>
+                      <div id="condition" style={{marginTop: '80px', fontSize: '20px'}}>This auction is concluded, it's not possible to offer anymore</div>
+                    </div>
+                  )
                 }
               })}
           </div>
