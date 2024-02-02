@@ -17,8 +17,6 @@ function Home() {
 
   const [item, setItem] = useState('');
 
-  const [array, setArray] = useState([]);
-
   function getDeadline(finish){
     const options = {
         timeZone: 'Europe/Rome', 
@@ -186,8 +184,14 @@ function Home() {
       <Link className="register" to="/register">Register</Link>
       <a href="/">Home</a>
 
-      <form action="/search" method="get" style={{padding:'13px'}}>
-        <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
+      <form action="/searchresults" method="get" style={{padding:'13px'}}>
+        <input type="text" id="searchText" name="searchText" placeholder="Search..." style={{borderRadius:'10px'}}/>
+        <select id="category" name="category" style={{borderRadius:'10px'}}>
+          <option value="all"selected>All</option>
+          <option value="tech">Tech</option>
+          <option value="videogames">Videogames</option>
+          <option value="books">Books</option>
+        </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
 
@@ -204,8 +208,14 @@ function Home() {
       <a href="MyAuctions">My Auctions</a>
       <a href="/">Home</a>
 
-      <form action="/search" method="get" style={{padding:'13px'}}>
-        <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
+      <form action="/searchresults" method="get" style={{padding:'13px'}}>
+        <input type="text" id="searchText" name="searchText" placeholder="Search..." style={{borderRadius:'10px'}}/>
+        <select id="category" name="category" style={{borderRadius:'10px'}}>
+          <option value="all"selected>All</option>
+          <option value="tech">Tech</option>
+          <option value="videogames">Videogames</option>
+          <option value="books">Books</option>
+        </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
 

@@ -7,6 +7,7 @@ import Settings from "./Settings";
 import MyAuctions from "./MyAuctions";
 import Auction from "./Auction";
 import MyOffers from "./MyOffers";
+import SearchResults from "./SearchResults";
 
 
 /*function App() {
@@ -52,6 +53,7 @@ function App(){
         <Route path="myauctions" element={<MyAuctions/>}/>
         <Route path="myoffers" element={<MyOffers/>}/>
         <Route path="/auction/:auctionId" element={<Auction />} />
+        <Route path="searchresults" element={<SearchResults/>}/>
       </Routes>
     </BrowserRouter>
   )
