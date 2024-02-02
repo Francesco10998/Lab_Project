@@ -5,6 +5,8 @@ import trending from "./images/trending.png"
 import card from "./images/Card.png"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Settings = () => {
 
@@ -119,21 +121,112 @@ const Settings = () => {
 
       const result = await response.json();
 
-      if(newParameter=='0'){
-        sessionStorage.setItem('userData',result.data_user[0]);
-        setOldUsername(username);
+      //-------------------------------check server response to visualize error ------------------------------
+      //check the server response for the username
+      if(newParameter==0){ 
+        if(result.data_user[0]==["username modified"]){
+          //update the variable oldusername to contain the old current user appena sostituito da newusername
+          sessionStorage.setItem('userData',result.data_user[0]);
+          setOldUsername(username);
+          toast.success('Username updated!',{
+            position: 'top-left',
+          });
+        }
+        else if(result.data_user[0]==["username not modified"]){
+          toast.error('Username not updated!',{
+            position: 'top-left',
+          });
+        }else{
+          toast.error("Username inserted not respected the following rules.",{
+            position: 'top-left',
+          });
+        }
       }
-      if(newParameter=='3'){
-        console.log(result.data_user[0]);
+
+      //check the server response for the email 
+      if(newParameter==1){
+        if(result.data_user[0]==["email modified"]){
+          toast.success('EMail updated!',{
+            position: 'top-left',
+          });
+        }
+        else if(result.data_user[0]==["email already exists"]){
+          toast.error("Email already exists!",{
+            position: 'top-left',
+          });
+        }else if(result.data_user[0]==["email not satisfies"]){
+          toast.error("Email inserted doesn't respected the rules.",{
+            position: 'top-left',
+          });
+        }else{
+          toast.error("Email inserted is wrong",{
+            position: 'top-left',
+          });
+        }
       }
-      
-      if(result.data_user[0]==["Password mismatch"]){
-        setErrorMessage("La vecchia password inserita è errata.");
+
+      //check the server response for the phone number 
+      if(newParameter==2){
+        if(result.data_user[0]==["Phone modified"]){
+          toast.success('Phone number updated!',{
+            position: 'top-left',
+          });
+        }else{
+          toast.error("Phone number is wrong",{
+            position: 'top-left',
+          });
+        }
       }
-      if(result.data_user[0]!=["Password mismatch"]){
-        setErrorMessage("Password Aggiornata.");
+
+      //check the server response for the address 
+      if(newParameter==4){
+        if(result.data_user[0]==["Address modified"]){
+          // Set to 10sec
+          toast.success('Address updated!',{
+            position: 'top-left',
+          });
+        }else{
+          toast.error('Address not updated!',{
+            position: 'bottom-right',
+          });
+        }
       }
-      
+
+      //check the server response for the payment method 
+      if(newParameter==5){
+        if(result.data_user[0]==["Payment modified"]){
+          toast.success('Payment method updated!',{
+            position: 'top-left',
+          });
+        }else{
+          toast.error('Address not updated!',{
+            position: 'top-left',
+          });
+        }
+      }
+
+      // check server response for the password
+      if(newParameter==3){
+        if(result.data_user[0]==["Password mismatch"]){
+          toast.error('Old password is wrong!',{
+            position: 'top-left',
+          });
+        }
+        else if(result.data_user[0]==["Password not satisfies"]){
+          toast.error("Password doesn't satisfies requirements!",{
+            position: 'top-left',
+          });
+        }else if(result.data_user[0]==["Password updated"]){
+          toast.success('Pasword updated!',{
+            position: 'top-left',
+          });
+        }else{
+          toast.error('Password not updated!',{
+            position: 'top-left',
+          });
+        }
+      }
+      ///--------------------------------------------------------------------------------------------
       console.log(parameter,email,result,sessionStorage.getItem('userData'));
 
     } 
@@ -173,8 +266,14 @@ const Settings = () => {
       <a href="MyAuctions">My Auctions</a>
       <a href="/">Home</a>
 
-      <form action="/search" method="get" style={{padding:'13px'}}>
-        <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
+      <form action="/searchresults" method="get" style={{padding:'13px'}}>
+        <input type="text" id="searchText" name="searchText" placeholder="Search..." style={{borderRadius:'10px'}}/>
+        <select id="category" name="category" style={{borderRadius:'10px'}}>
+          <option value="all"selected>All</option>
+          <option value="tech">Tech</option>
+          <option value="videogames">Videogames</option>
+          <option value="books">Books</option>
+        </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
 
@@ -319,6 +418,8 @@ const Settings = () => {
           <button type="submit" class="button" id="paymentSubmit"onClick={submitChange}>Change</button>
         </div>
       </div>
+
+      <ToastContainer />
 
   </div>
   )
