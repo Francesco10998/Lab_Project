@@ -144,8 +144,14 @@ const MyAuctions = () => {
       <a href="MyAuctions">My Auctions</a>
       <a href="/">Home</a>
 
-      <form action="/search" method="get" style={{padding:'13px'}}>
-        <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
+      <form action="/searchresults" method="get" style={{padding:'13px'}}>
+        <input type="text" id="searchText" name="searchText" placeholder="Search..." style={{borderRadius:'10px'}}/>
+        <select id="category" name="category" style={{borderRadius:'10px'}}>
+          <option value="all"selected>All</option>
+          <option value="tech">Tech</option>
+          <option value="videogames">Videogames</option>
+          <option value="books">Books</option>
+        </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
 
