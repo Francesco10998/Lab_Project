@@ -530,6 +530,81 @@ app.post("/auction", (req, res) => {
   }
 });
 
+//---------------- searchresults page ------------------------
+app.post("/searchresults", (req, res) => {
+  const { mode, searchText, id, cat } = req.body;
+  console.log(req.body)
+
+  if(mode == "auctions"){
+
+    const options = {
+      timeZone: 'Europe/Rome', 
+      hour12: false,
+    };
+    const data = new Date().toLocaleString('en-US', options);
+
+    Query = "SELECT * FROM auctions WHERE auctionId='"+id+"' AND finishingTime > STR_TO_DATE('"+data+"', '%m/%d/%Y, %H:%i:%s')";
+
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log(results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("AUCTION");
+          res.json(results)
+          console.log(results);
+        }
+      }
+    });
+  }
+  else if(mode == "items"){
+    const options = {
+      timeZone: 'Europe/Rome', 
+      hour12: false,
+    };
+    const data = new Date().toLocaleString('en-US', options);
+    
+    if(cat=="all"){
+      if(searchText==""){
+        //Query = 'SELECT * FROM items LIMIT 6';
+        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") LIMIT 6';
+      }
+      else{
+        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") AND name LIKE "%' + searchText + '%" LIMIT 6';
+        //Query = 'SELECT * FROM items WHERE name LIKE "%' + searchText + '%" LIMIT 6';
+      }
+    }
+    else{
+      if(searchText==""){
+        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") AND category="'+cat+'" LIMIT 6';
+        //Query = 'SELECT * FROM items WHERE category="'+cat+'" LIMIT 6';
+      }
+      else{
+        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") AND name LIKE "%' + searchText + '%" AND category="'+cat+'" LIMIT 6';
+        //Query = 'SELECT * FROM items WHERE category="'+cat+'" AND name LIKE "%' + searchText + '%" LIMIT 6';
+      }
+    }
+
+    console.log("%%%%% "+Query);
+
+    //Execute Query
+    utils.pool.query(Query, function (error, results, fields) {
+      if (error) throw error;
+      else{
+        //console.log(results);
+        //console.log(results.length);
+        if(results.length!=0){
+          console.log("ITEMS");
+          res.json(results);
+          console.log(results);
+        }
+      }
+    });
+  }
+});
+
 //This part is used for adding an image to DB
 /*const fs = require('fs');
 
