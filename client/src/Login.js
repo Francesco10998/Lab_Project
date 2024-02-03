@@ -1,4 +1,4 @@
-import { Link, Navigate ,useNavigate } from "react-router-dom";
+import { Link, Navigate,useNavigate } from "react-router-dom";
 import React, { useEffect,useState } from 'react';
 import './css/Login.css';
 import trending from "./images/trending.png"
@@ -74,7 +74,6 @@ const Login = () => {
       const result = await response.json();
       setData(result);
       if(result.results=="authenticated"){
-        console.log('ciaoooooooooooooooooooooooooooooo');
         sessionStorage.setItem('userData',username);
         navigate('/');
       }

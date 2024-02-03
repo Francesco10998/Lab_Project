@@ -1,17 +1,17 @@
 import { Link, Navigate, useRouteLoaderData } from "react-router-dom";
-import React, { useEffect,useState } from 'react';
+import {React, useEffect, useState } from 'react';
 import './css/Settings.css';
 import trending from "./images/trending.png"
 import card from "./images/Card.png"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import { toast,ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Settings = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
-  const [data, setData] = useState(null);
+  const [data, setData] = useState("");
   const [password, setPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -19,7 +19,7 @@ const Settings = () => {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [pay, setPay] = useState('');
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(sessionStorage.getItem('userData'));
   const [oldUsername, setOldUsername] = useState('');
   const [mode,setMode] = useState('');
   const [parameter, setParameter] = useState('');
@@ -61,7 +61,6 @@ const Settings = () => {
   };
 
   const submitChange = async (event) => {
-
 
     const newMode = 'modify';
 
@@ -146,7 +145,7 @@ const Settings = () => {
       //check the server response for the email 
       if(newParameter==1){
         if(result.data_user[0]==["email modified"]){
-          toast.success('EMail updated!',{
+          toast.success('Email updated!',{
             position: 'top-left',
           });
         }
@@ -324,6 +323,7 @@ const Settings = () => {
   }
 
   useEffect(() =>{
+    console.log("CANSU");
     if (counter < 2) {
       Display();
       setCounter(counter + 1);

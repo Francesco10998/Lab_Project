@@ -1,13 +1,16 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import React, { useEffect,useState } from 'react';
 import './css/Register.css';
 import trending from "./images/trending.png"
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email,setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [data, setData] = useState(null);
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -52,7 +55,9 @@ const Register = () => {
   }
 
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+
+    event.preventDefault();
 
     try {
         const response = await fetch('/register', {
@@ -69,7 +74,7 @@ const Register = () => {
           }),
         });
         
-        console.log(username,password);
+        console.log(username, password);
   
         if (!response.ok) {
           throw new Error('Network response was not ok.');
@@ -77,6 +82,38 @@ const Register = () => {
   
         const result = await response.json();
         setData(result);
+        console.log("ENTRATO "+JSON.stringify(result.results));
+
+        //Check the server response for the Email
+        if(result.results=="Email not satisfies"){
+          toast.error('Email format is not correct',{
+            position: 'top-left',
+          });
+        }
+        else if(result.results=="email_already_exists"){
+          toast.error("Email already exists",{
+            position: 'top-left',
+          });
+        }
+
+        //Check the server response for the Password
+        if(result.results=="Password not satisfies"){
+          toast.error('Password format is not correct',{
+            position: 'top-left',
+          });
+        }
+
+        //Check the server response for the Username
+        if(result.results=="username_already_exists"){
+          toast.error('Username already exists',{
+            position: 'top-left',
+          });
+        }
+
+        if(result.results=="user_inserted"){
+          sessionStorage.setItem('userData', username);
+          navigate('/');
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -100,6 +137,7 @@ const Register = () => {
         </form>
       </div>
       </div>
+      <ToastContainer />
     </div>
   )
 }
