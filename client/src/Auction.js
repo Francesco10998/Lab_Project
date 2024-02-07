@@ -1,5 +1,5 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './css/Auction.css';
 import trending from "./images/trending.png"
 import iphone from "./images/iphone.jpg"
@@ -7,9 +7,19 @@ import time from "./images/time.png"
 import victory from "./images/victory.jpg"
 import { useParams } from 'react-router-dom';
 import { differenceInMinutes, differenceInHours, differenceInDays, differenceInSeconds } from 'date-fns';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Auction = () => {
   const { auctionId } = useParams();
+
+  const [bet, setBet] = useState('');
+
+  const [category, setCategory] = useState('');
+
+  const inputRef = useRef();
+
+  const navigate = useNavigate();
 
   function getDeadline(finish){
     const options = {
@@ -31,7 +41,7 @@ const Auction = () => {
     return [remainingDays, remainingHours, remainingMinutes, remainingSeconds];
   }
 
-  let [user, setUser] = useState(sessionStorage.getItem('userData'));
+  const [user, setUser] = useState(sessionStorage.getItem('userData'));
 
   const [auctions, setAuctions] = useState('');
 
@@ -99,6 +109,7 @@ const Auction = () => {
 
   useEffect(() => {
     setUser(sessionStorage.getItem('userData'));
+
     const fetchData = async () => {
       try {
         const auctionsResult = await getAuctions(auctionId);
@@ -110,6 +121,8 @@ const Auction = () => {
 
         const item = await Promise.all(itemPromises);
         console.log('Risposta di getItems:', item);
+
+        setCategory(item[0][0].category);
         
         setItem(item);
 
@@ -132,6 +145,53 @@ const Auction = () => {
   const handleLogout = () => {
     sessionStorage.removeItem('userData');
   };
+
+  //Fetching with new bet
+  const HandleSubmitOffer = async (event) => {
+
+    event.preventDefault();
+
+    if(isNaN(inputRef.current.value)){
+      toast.error('Bet must be a number',{
+        position: 'top-left',
+      });
+    }
+    else if(inputRef.current.value > auctions[0].bet){
+
+      try {
+          const response = await fetch('/offer', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': 'https://localhost:8000',
+              // Add other headers if necessary
+            },
+            body: JSON.stringify({
+              username: user,
+              id: auctions[0].auctionId,
+              bet: inputRef.current.value,
+              category: category
+            }),
+          });
+          
+          console.log(user, bet);
+    
+          if (!response.ok) {
+            throw new Error('Network response was not ok.');
+          }
+
+          navigate(`/auction/${auctionId}`);
+
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+    }
+    else{
+      toast.error('Bet must be higher that the current one',{
+        position: 'top-left',
+      });
+    }
+  }
 
   if(sessionStorage.getItem('userData') != null){
     return (<div>
@@ -271,8 +331,10 @@ const Auction = () => {
                       <div id="current-winner">Current Winner: {auction.currentWinner}</div>
                       <div id="offer-row">
                         <div id="offer-label">Make an offer:</div>
-                        <input type="text" id="bid-input" placeholder="00,00 $"></input>
-                        <input type="submit" id="bid-button" value="Surpass" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }} />
+                        <form className='offerform' onSubmit={HandleSubmitOffer}>
+                          <input type="text" id="bid-input" ref={inputRef} placeholder="00,00 $" ></input>
+                          <input type="submit" id="bid-button" value="Surpass" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }} />
+                        </form>
                       </div>
                       <div id="condition">Offer will not be accepted if it is less or equal to the leading one*</div>
                     </div>
@@ -293,6 +355,7 @@ const Auction = () => {
           </div>
       </div>
       ))}
+      <ToastContainer />
     </div>
     )
   }

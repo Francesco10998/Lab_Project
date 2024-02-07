@@ -2,6 +2,8 @@ const express = require("express");
 
 const utils = require("./util");
 
+const amqp = require('amqplib/callback_api');
+
 const PORT = 5000;
 
 const app = express();
@@ -271,6 +273,43 @@ app.post("/searchresults", (req, res) => {
       }
     });
   }
+});
+
+//---------------- offer management ------------------------
+app.post("/offer", (req, res) => {
+  const { username, id, bet, category } = req.body;
+  console.log(req.body)
+
+  amqp.connect('amqp://localhost:5672', (err, connection) => {
+    if (err) {
+        throw err;
+    }
+    connection.createChannel((err, channel) => {
+        if (err) {
+            throw err;
+        }
+
+        let exchangeName = 'ExchangeOffer';
+        let routingKey = category.toString(); //Routing Key for a specific Worker
+        let arrayToSend = [bet, username.toString(), id];
+
+        // Converti l'array in una stringa JSON
+        let message = JSON.stringify(arrayToSend);
+
+        channel.assertExchange(exchangeName, 'direct', {
+            durable: false
+        });
+
+        channel.publish(exchangeName, routingKey, Buffer.from(message));
+        console.log(`Sent message to worker with ID ${routingKey}`);
+
+        res.json("OK");
+
+        setTimeout(() => {
+            connection.close();
+        }, 1000);
+    });
+  });
 });
 
 

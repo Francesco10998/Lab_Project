@@ -119,6 +119,20 @@ app.post("/auction", (req, res) => {
     });
 });
 
+//---------------- offer management ------------------------
+app.post("/offer", (req, res) => {
+  const postData = req.body;
+  
+  axios.post('http://localhost:5000/offer', postData)
+    .then(response => {
+      console.log('Server Response:', response.data);
+      res.json(response.data);
+    })
+    .catch(error => {
+      console.error('Error during POST:', error);
+    });
+});
+
 //---------------- searchresults page ------------------------
 app.post("/searchresults", (req, res) => {
   const postData = req.body;
