@@ -8,6 +8,7 @@ import MyAuctions from "./MyAuctions";
 import Auction from "./Auction";
 import MyOffers from "./MyOffers";
 import SearchResults from "./SearchResults";
+import CreateAuctions from "./CreateAuctions";
 
 
 /*function App() {
@@ -54,6 +55,7 @@ function App(){
         <Route path="myoffers" element={<MyOffers/>}/>
         <Route path="/auction/:auctionId" element={<Auction />} />
         <Route path="searchresults" element={<SearchResults/>}/>
+        <Route path="createauctions" element={<CreateAuctions/>}/>
       </Routes>
     </BrowserRouter>
   )

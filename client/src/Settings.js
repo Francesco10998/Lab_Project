@@ -1,7 +1,7 @@
 import { Link, Navigate, useRouteLoaderData } from "react-router-dom";
 import {React, useEffect, useState } from 'react';
 import './css/Settings.css';
-import trending from "./images/trending.png"
+import golden from "./images/goldenauctions.png"
 import card from "./images/Card.png"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
@@ -250,9 +250,8 @@ const Settings = () => {
   function Titolo(){
     return (
       <div style={{ textAlign: 'center',backgroundColor:'#333333',height:'30px'}}>
-       <img src={trending} style={{height:'100px', width:'430px', margin:'auto', marginTop:'-15px'}}></img>
+        <img src={golden} style={{height:'70px', width:'400px', margin:'auto', marginTop:'5px'}}></img>
       </div>
-    
     )
   }
 

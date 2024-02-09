@@ -1,19 +1,22 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import React, { useEffect, useState, useRef } from 'react';
 import './css/Auction.css';
-import trending from "./images/trending.png"
-import iphone from "./images/iphone.jpg"
+import golden from "./images/goldenauctions.png"
 import time from "./images/time.png"
 import victory from "./images/victory.jpg"
 import { useParams } from 'react-router-dom';
 import { differenceInMinutes, differenceInHours, differenceInDays, differenceInSeconds } from 'date-fns';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useLocation } from 'react-router-dom';
 
 const Auction = () => {
   const { auctionId } = useParams();
 
-  const [bet, setBet] = useState('');
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const surpassed = queryParams.get('surpassed');
 
   const [category, setCategory] = useState('');
 
@@ -40,6 +43,9 @@ const Auction = () => {
 
     return [remainingDays, remainingHours, remainingMinutes, remainingSeconds];
   }
+
+  const [surpassedToastShown, setSurpassedToastShown] = useState(0);
+  const [sur, setSur] = useState(false);
 
   const [user, setUser] = useState(sessionStorage.getItem('userData'));
 
@@ -151,7 +157,17 @@ const Auction = () => {
 
     event.preventDefault();
 
-    if(isNaN(inputRef.current.value)){
+    if(sessionStorage.getItem('userData') == null){
+      toast.error('You must be logged to make an Offer',{
+        position: 'top-left',
+      });
+    }
+    else if(sessionStorage.getItem('userData') == auctions[0].creatorUsername){
+      toast.error('You cannot offer to your own Auction',{
+        position: 'top-left',
+      });
+    }
+    else if(isNaN(inputRef.current.value)){
       toast.error('Bet must be a number',{
         position: 'top-left',
       });
@@ -173,14 +189,21 @@ const Auction = () => {
               category: category
             }),
           });
-          
-          console.log(user, bet);
     
           if (!response.ok) {
             throw new Error('Network response was not ok.');
           }
 
-          navigate(`/auction/${auctionId}`);
+          const result = await response.json();
+          console.log("ROTOM "+JSON.stringify(result));
+
+          if(result.data_check[0] == ["offer already surpassed"]){
+            const url = `/auction/${auctionId}?surpassed=1`;
+            window.location.href = url;
+          }
+          else{
+            window.location.reload();
+          }
 
         } catch (error) {
           console.error('Error fetching data:', error);
@@ -197,6 +220,7 @@ const Auction = () => {
     return (<div>
       <Titolo/>
       <NavbarLogged/>
+      <ToastContainer />
       <Page/>
     </div>)
   }
@@ -204,6 +228,7 @@ const Auction = () => {
     return (<div>
         <Titolo/>
         <Navbar/>
+        <ToastContainer />
         <Page/>
     </div>
     )
@@ -212,9 +237,8 @@ const Auction = () => {
   function Titolo(){
     return (
       <div style={{ textAlign: 'center',backgroundColor:'#333333',height:'30px'}}>
-       <img src={trending} style={{height:'100px', width:'430px', margin:'auto', marginTop:'-15px'}}></img>
+        <img src={golden} style={{height:'70px', width:'400px', margin:'auto', marginTop:'5px'}}></img>
       </div>
-    
     )
   }
 
@@ -263,6 +287,18 @@ const Auction = () => {
     )
   }
 
+  function Popup(){
+    if (surpassed == 1 && surpassedToastShown<2) {
+      if(!sur && surpassedToastShown==1){
+        toast.error('Offer has been already surpassed by another user', {
+          position: 'top-left',
+        });
+        setSur(true);
+      }
+      setSurpassedToastShown(surpassedToastShown+1);
+    }
+  }
+
   function Page(){
     const [times, setTimes] = useState([]);
 
@@ -290,6 +326,8 @@ const Auction = () => {
     }, [auctions]);
 
     return (<div>
+      <br></br>
+      <br></br>
       {auctions && auctions.length > 0 && auctions.map((auction) => (
         <div id="auction-container">
           <div id="item-image">
@@ -298,11 +336,11 @@ const Auction = () => {
             )}
           </div>
           <div id="item-details">
-              <div id="first-row">
                 {item && item.length > 0 && item.map((it) => (
                     <div id="item-name">{it[0].name}</div>
                 ))}
-                <img src={time} id="time-image" alt="Time Image" height="40"/>
+                <div id="first-row">
+                <img src={time} id="time-image" alt="Time Image" height="60"/>
                 {times && times.length > 0 && times.map((time) => {
                   if (time.isPassed && time.endsIn[0] === 0) {
                     return <p id="time-remaining">Finished Today</p>;
@@ -318,7 +356,7 @@ const Auction = () => {
                     );
                   }
                 })}
-              </div>
+                </div>
               <div id="seller-name">Seller: {auction.creatorUsername}</div>
               {item && item.length > 0 && item.map((it) => (
                 <div id="item-description">{it[0].description}</div>
@@ -328,7 +366,11 @@ const Auction = () => {
                   return(
                     <div>
                       <div id="leading-offer">Leading Offer: ${auction.bet}</div>
-                      <div id="current-winner">Current Winner: {auction.currentWinner}</div>
+                      {auction.currentWinner != null ? (
+                        <div id="current-winner">Current Winner: {auction.currentWinner}</div>
+                      ) : (
+                        <div id="current-winner">Nobody offered yet</div>
+                      )}
                       <div id="offer-row">
                         <div id="offer-label">Make an offer:</div>
                         <form className='offerform' onSubmit={HandleSubmitOffer}>
@@ -347,7 +389,7 @@ const Auction = () => {
                         <img src={victory} id="victory-image" alt="Victory Image" height="100"/>
                         <div id="leading-offer" style={{marginLeft: '0px'}}>{auction.currentWinner} won the auction for ${auction.bet}</div>
                       </div>
-                      <div id="condition" style={{marginTop: '80px', fontSize: '20px'}}>This auction is concluded, it's not possible to offer anymore</div>
+                      <div id="condition" style={{marginTop: '60px', fontSize: '20px'}}>This auction is concluded, it's not possible to offer anymore</div>
                     </div>
                   )
                 }
@@ -355,7 +397,7 @@ const Auction = () => {
           </div>
       </div>
       ))}
-      <ToastContainer />
+      {Popup()}
     </div>
     )
   }

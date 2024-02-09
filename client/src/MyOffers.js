@@ -1,8 +1,7 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import './css/MyOffers.css';
-import trending from "./images/trending.png"
-import iphone from "./images/iphone.jpg"
+import golden from "./images/goldenauctions.png"
 import { differenceInMinutes, differenceInHours, differenceInDays, differenceInSeconds } from 'date-fns';
 
 const MyOffers = () => {
@@ -164,9 +163,8 @@ const MyOffers = () => {
   function Titolo(){
     return (
       <div style={{ textAlign: 'center',backgroundColor:'#333333',height:'30px'}}>
-       <img src={trending} style={{height:'100px', width:'430px', margin:'auto', marginTop:'-15px'}}></img>
+        <img src={golden} style={{height:'70px', width:'400px', margin:'auto', marginTop:'5px'}}></img>
       </div>
-    
     )
   }
 

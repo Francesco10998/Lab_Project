@@ -80,5 +80,6 @@ body {
   width: 100%;
   }
 
-
-  
+  #create-row{
+    display: flex;
+  }

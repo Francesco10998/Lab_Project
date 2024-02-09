@@ -9,6 +9,12 @@ const PORT = 8000;
 const app = express();
 app.use(express.json());
 
+const multer = require('multer'); 
+const storage = multer.memoryStorage(); 
+const upload = multer({ storage: storage });
+
+
+
 //----------------- app routing -------------------------
 
 //------------------home page ---------------------------
@@ -138,6 +144,40 @@ app.post("/searchresults", (req, res) => {
   const postData = req.body;
   
   axios.post('http://localhost:5000/searchresults', postData)
+    .then(response => {
+      console.log('Server Response:', response.data);
+      res.json(response.data);
+    })
+    .catch(error => {
+      console.error('Error during POST:', error);
+    });
+});
+
+//---------------- create auctions ------------------------
+app.post("/createauctions", upload.single('image'), (req, res) => {
+  const postData = req.body;
+  const imageData = req.file.buffer;
+
+  //const imageBlob = blobUtil.createBlob([imageData.buffer], { type: imageData.mimetype });
+
+  // Creare un oggetto FormData
+  const formData = new FormData();
+  formData.append('postData', JSON.stringify(postData)); // Aggiungere i dati del post
+  //formData.append('image', imageBlob, imageData.originalname);  
+  formData.append('image', JSON.stringify(imageData));  
+
+  //console.log("QQQQQQ "+JSON.stringify(formData));  
+
+
+  formData.headers = {
+    'Content-Type': 'multipart/form-data'
+  };
+
+  /*for (let [key, value] of formData.entries()) {
+    console.log(`${key}: ${value}`);
+  }*/
+  
+  axios.post('http://localhost:5000/createauctions', formData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);

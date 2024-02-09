@@ -1,9 +1,8 @@
 import { Link, Navigate,useHistory } from "react-router-dom";
 import './css/SearchResults.css';
-import iphone from "./images/iphone.jpg"
 import plus from "./images/plus.png"
 //import logo from "./images/logo.jpg"
-import trending from "./images/trending.png"
+import golden from "./images/goldenauctions.png"
 import noresults from "./images/noresults.png"
 import { useEffect, useState } from 'react';
 import { differenceInMinutes, differenceInHours, differenceInDays, differenceInSeconds } from 'date-fns';
@@ -80,11 +79,6 @@ function SearchResults() {
           // Esegui qualcosa con la risposta di getItems
           console.log('Risposta di getItems:', itemsResult);
 
-          /*const auctionPromises = itemsResult.slice(0, itemsResult.length).map((item) => getAuctions(item.id));
-
-          const auction = await Promise.all(auctionPromises);
-          
-          setAuctions(auction);*/
         } 
         catch (error) {
           console.error('Errore durante il recupero delle aste:', error);
@@ -119,9 +113,8 @@ function SearchResults() {
   function Titolo(){
     return (
       <div style={{ textAlign: 'center',backgroundColor:'#333333',height:'30px'}}>
-      <img src={trending} style={{height:'100px', width:'430px', margin:'auto', marginTop:'-15px'}}></img>
+        <img src={golden} style={{height:'70px', width:'400px', margin:'auto', marginTop:'5px'}}></img>
       </div>
-    
     )
   }
 
@@ -205,6 +198,12 @@ function SearchResults() {
       // Cleanup the interval when the component unmounts
       return () => clearInterval(updateInterval);
     }, [items]);
+
+    //Manage no results spawn
+    const [isVisible, setIsVisible] = useState(false);
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 500); 
     
     if(items.length>0){
         return (
@@ -240,8 +239,8 @@ function SearchResults() {
             <img src={plus} style={{ width: '20px', height: '20px' }} alt="plus-icon" />
             </a>
             <br></br>
-            <h1 style={{ marginLeft: '650px' }}>No Results</h1>
-            <img src={noresults} style={{height:'400px', marginLeft: '560px'}}></img>
+            <h1 style={{ marginLeft: '650px', display: isVisible ? 'block' : 'none'  }}>No Results</h1>
+            <img src={noresults} style={{height:'400px', marginLeft: '560px', display: isVisible ? 'block' : 'none'}}></img>
         </div>
         );
     }

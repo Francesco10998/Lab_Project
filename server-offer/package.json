@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node receiver-tech1.js\" \"node receiver-tech2.js\" \"node receiver-videogames1.js\" \"node receiver-videogames2.js\""
+    "start": "concurrently \"node receiver-tech1.js\" \"node receiver-tech2.js\" \"node receiver-videogames1.js\" \"node receiver-videogames2.js\" \"node receiver-books1.js\" \"node receiver-books2.js\""
   },
   "author": "",
   "license": "ISC",

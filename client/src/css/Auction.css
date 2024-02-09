@@ -8,7 +8,7 @@ body {
 #auction-container {
     display: flex;
     max-width: 1200px;
-    margin: 20px auto;
+    margin-top: 300px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -26,7 +26,6 @@ body {
 
 #first-row{
     display: flex;
-    align-content: center;
     margin-top: 20px;
 }
 
@@ -36,14 +35,10 @@ body {
     margin-bottom: 10px;
 }
 
-#time-image{
-    margin-left: 150px;
-}
-
 #time-remaining {
     font-size: 16px;
     color: #ff0000;
-    margin-top: 5px;
+    margin-top: 20px;
 }
 
 #seller-name {
@@ -60,6 +55,7 @@ body {
     font-size: 25px;
     margin-top: 50px;
     margin-left: 80px;
+    max-width: 400px;
     font-weight: bold;
 }
 
@@ -103,5 +99,5 @@ body {
 #winner-row{
     display: flex;
     align-content: center;
-    margin-top: 80px;
+    margin-top: 60px;
 }

@@ -10,6 +10,7 @@ const app = express();
 app.use(express.json());
 const cors = require('cors');
 
+
 //-----allow-cross-origin------//
 
 /*app.use((req, res, next) => {
@@ -20,6 +21,10 @@ const cors = require('cors');
 });
 */
 app.use(cors({ origin: 'http://localhost:3000' }));
+
+const multer = require('multer'); 
+const storage = multer.memoryStorage(); 
+const upload = multer({ storage: storage });
 
 //----------------- app routing -------------------------
 
@@ -239,20 +244,20 @@ app.post("/searchresults", (req, res) => {
     if(cat=="all"){
       if(searchText==""){
         //Query = 'SELECT * FROM items LIMIT 6';
-        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") LIMIT 6';
+        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s"))) LIMIT 6';
       }
       else{
-        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") AND name LIKE "%' + searchText + '%" LIMIT 6';
+        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") AND name LIKE "%' + searchText + '%" ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s"))) LIMIT 6';
         //Query = 'SELECT * FROM items WHERE name LIKE "%' + searchText + '%" LIMIT 6';
       }
     }
     else{
       if(searchText==""){
-        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") AND category="'+cat+'" LIMIT 6';
+        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") AND category="'+cat+'" ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s"))) LIMIT 6';
         //Query = 'SELECT * FROM items WHERE category="'+cat+'" LIMIT 6';
       }
       else{
-        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") AND name LIKE "%' + searchText + '%" AND category="'+cat+'" LIMIT 6';
+        Query = 'SELECT * FROM auctions INNER JOIN items ON auctions.AuctionId = items.id WHERE finishingTime > STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s") AND name LIKE "%' + searchText + '%" AND category="'+cat+'" ORDER BY ABS(DATEDIFF(finishingTime, STR_TO_DATE("'+data+'", "%m/%d/%Y, %H:%i:%s"))) LIMIT 6';
         //Query = 'SELECT * FROM items WHERE category="'+cat+'" AND name LIKE "%' + searchText + '%" LIMIT 6';
       }
     }
@@ -280,36 +285,111 @@ app.post("/offer", (req, res) => {
   const { username, id, bet, category } = req.body;
   console.log(req.body)
 
-  amqp.connect('amqp://localhost:5672', (err, connection) => {
-    if (err) {
-        throw err;
-    }
-    connection.createChannel((err, channel) => {
-        if (err) {
-            throw err;
+  Query = "SELECT bet FROM auctions where auctionId = '"+id+"'";
+    utils.pool.query(Query, function (error, results, fields) {
+        if (error){
+          res.status(500).json({ "data_check": ["server error"] });
+          throw error;
         }
+        if (results.length !== 0) {
+          if(bet > results[0].bet){
+            amqp.connect('amqp://localhost:5672', (err, connection) => {
+              if (err) {
+                  throw err;
+              }
+              connection.createChannel((err, channel) => {
+                  if (err) {
+                      throw err;
+                  }
 
-        let exchangeName = 'ExchangeOffer';
-        let routingKey = category.toString(); //Routing Key for a specific Worker
-        let arrayToSend = [bet, username.toString(), id];
+                  let exchangeName = 'ExchangeOffer';
+                  let routingKey = category.toString(); //Routing Key for a specific Worker
+                  let arrayToSend = [bet, username.toString(), id];
 
-        // Converti l'array in una stringa JSON
-        let message = JSON.stringify(arrayToSend);
+                  // Converti l'array in una stringa JSON
+                  let message = JSON.stringify(arrayToSend);
 
-        channel.assertExchange(exchangeName, 'direct', {
-            durable: false
-        });
+                  channel.assertExchange(exchangeName, 'direct', {
+                      durable: false
+                  });
 
-        channel.publish(exchangeName, routingKey, Buffer.from(message));
-        console.log(`Sent message to worker with ID ${routingKey}`);
+                  channel.publish(exchangeName, routingKey, Buffer.from(message));
+                  console.log(`Sent message to worker with ID ${routingKey}`);
 
-        res.json("OK");
+                  res.json({ "data_check": ["OK"] });
 
-        setTimeout(() => {
-            connection.close();
-        }, 1000);
+                  setTimeout(() => {
+                      connection.close();
+                  }, 1000);
+              });
+            });
+          }
+          else{
+            res.json({ "data_check": ["offer already surpassed"] })
+          }
+        } 
+        else {
+          //If auction doesn't exists
+        }
     });
+});
+
+
+//---------------- create auctions ------------------------
+app.post("/createauctions", upload.single('image'), (req, res) => { 
+  const formData = JSON.parse(req.body.postData);
+  const imageBuffer = JSON.parse(req.body.image);
+
+  const buffer = Buffer.from(imageBuffer);
+
+  const options = {
+    timeZone: 'Europe/Rome', 
+    hour12: false,
+  };
+  const date = new Date().toLocaleString('en-US', options);
+
+  const moment = require('moment');
+
+  const startDate = moment(date, 'MM/DD/YYYY, HH:mm:ss').toDate();
+ 
+  let { name, description, finishDate, category ,username} = formData; 
+   
+  const getMaxIdQuery = 'SELECT MAX(id) AS max_id FROM items'; 
+ 
+  utils.pool.query(getMaxIdQuery, (error, results) => { 
+    if (error) { 
+      console.error('Errore nel recupero del massimo ID:', error); 
+      res.status(500).json({ error: 'Internal Server Error' }); 
+    } else { 
+      const maxId = results[0].max_id || 0; // Se non ci sono record, imposta maxId a 0 
+      console.log('Massimo ID:', maxId); 
+      const QueryItem = 'INSERT INTO items (name,category , id ,description,image) VALUES (?, ?, ?, ?, ?)'; 
+      utils.pool.query(QueryItem, [name,category , maxId+1 ,description, buffer], (error, results) => { 
+        if (error) { 
+          console.error('Errore nell\'inserimento dell\'oggetto nel database:', error); 
+          res.status(500).json({ error: 'Internal Server Error' }); 
+        } else { 
+          console.log('Oggetto Item inserito nel database con successo!'); 
+          console.log(results); 
+ 
+          //query di auctions 
+          const QueryAuction= 'INSERT INTO auctions (auctionID,bet,currentWinner,startingTime,finishingTime,creatorUsername,participants) VALUES (?, ?, ?, ?, ?,?,?)'; 
+          utils.pool.query(QueryAuction, [maxId+1,0, null, startDate, finishDate,username,null], (error, results) => { 
+            if (error) { 
+              console.error('Errore nell\'inserimento dell\'oggetto nel database:', error); 
+              res.status(500).json({ error: 'Internal Server Error' }); 
+            } else { 
+              console.log('Oggetto Auction inserito nel database con successo!'); 
+              console.log(results); 
+          // Puoi rispondere al client con un messaggio di successo o qualsiasi altra cosa sia necessaria 
+              res.status(200).json({ success: true }); 
+            } 
+          }); 
+        } 
+      }); 
+    } 
   });
+ 
 });
 
 

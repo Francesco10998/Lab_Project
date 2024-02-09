@@ -1,9 +1,7 @@
 import { Link, Navigate,useHistory } from "react-router-dom";
 import './css/Home.css';
-import iphone from "./images/iphone.jpg"
 import plus from "./images/plus.png"
-//import logo from "./images/logo.jpg"
-import trending from "./images/trending.png"
+import golden from "./images/goldenauctions.png"
 import { useEffect, useState } from 'react';
 import { differenceInMinutes, differenceInHours, differenceInDays, differenceInSeconds } from 'date-fns';
 
@@ -172,9 +170,8 @@ function Home() {
   function Titolo(){
     return (
       <div style={{ textAlign: 'center',backgroundColor:'#333333',height:'30px'}}>
-      <img src={trending} style={{height:'100px', width:'430px', margin:'auto', marginTop:'-15px'}}></img>
+        <img src={golden} style={{height:'70px', width:'400px', margin:'auto', marginTop:'5px'}}></img>
       </div>
-    
     )
   }
 
@@ -269,10 +266,14 @@ function Home() {
     
     return (
       <div style={{ padding: '15px' }}>
-        <a href="Login.html" style={{ display: 'flex', width: '170px' }}>
-          <button style={{ borderRadius: '10px' }}>Create a new Auction</button>
-          <img src={plus} style={{ width: '20px', height: '20px' }} alt="plus-icon" />
-        </a>
+        {(sessionStorage.getItem('userData') != null) && (
+          <Link to={"/createauctions"}> 
+            <div id="create-row">
+              <button style={{ borderRadius: '10px' }}>Create a new Auction</button>
+              <img src={plus} style={{ width: '20px', height: '20px' }} alt="plus-icon" />
+            </div>
+          </Link> 
+        )}
         <br></br>
         <div className="grid">
           {articles.map((article, index) => (

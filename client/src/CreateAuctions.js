@@ -1,8 +1,7 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import './css/CreateAuctions.css';
-import trending from "./images/trending.png"
-import iphone from "./images/iphone.jpg"
+import golden from "./images/goldenauctions.png"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,7 +16,6 @@ const CreateAuctions = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    startDate: '',
     finishDate: '',
     category: 'Tech',
     image:'',
@@ -51,7 +49,6 @@ const CreateAuctions = () => {
     const formDataObject = new FormData();
     formDataObject.append('name', formData.name);
     formDataObject.append('description', formData.description);
-    formDataObject.append('startDate', formData.startDate);
     formDataObject.append('finishDate', formData.finishDate);
     formDataObject.append('category', formData.category);
     formDataObject.append('image', formData.image);
@@ -74,6 +71,7 @@ const CreateAuctions = () => {
         toast.success('Auction created with success',{
           position: 'top-left',
         });
+        navigate('/');
       } else {
         toast.error('Error creating the auction',{
           position: 'top-left',
@@ -98,9 +96,8 @@ const CreateAuctions = () => {
   function Titolo(){
     return (
       <div style={{ textAlign: 'center',backgroundColor:'#333333',height:'30px'}}>
-       <img src={trending} style={{height:'100px', width:'430px', margin:'auto', marginTop:'-15px'}}></img>
+        <img src={golden} style={{height:'70px', width:'400px', margin:'auto', marginTop:'5px'}}></img>
       </div>
-    
     )
   }
 
@@ -113,8 +110,14 @@ const CreateAuctions = () => {
       <a href="MyAuctions">My Auctions</a>
       <a href="/">Home</a>
 
-      <form action="/search" method="get" style={{padding:'13px'}}>
-        <input type="text" id="search" name="search" placeholder="Search..." style={{borderRadius:'10px'}}/>
+      <form action="/searchresults" method="get" style={{padding:'13px'}}>
+        <input type="text" id="searchText" name="searchText" placeholder="Search..." style={{borderRadius:'10px'}}/>
+        <select id="category" name="category" style={{borderRadius:'10px'}}>
+          <option value="all"selected>All</option>
+          <option value="tech">Tech</option>
+          <option value="videogames">Videogames</option>
+          <option value="books">Books</option>
+        </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
 
@@ -149,16 +152,6 @@ const CreateAuctions = () => {
         required
       ></textarea>
 
-      <label htmlFor="startDate">Start Date of the auction :</label>
-      <input
-        type="datetime-local"
-        id="startDate"
-        name="startDate"
-        value={formData.startDate}
-        onChange={handleChange}
-        required
-      />
-
       <label htmlFor="finishDate">Finish Date:</label>
       <input
         type="datetime-local"
@@ -178,10 +171,8 @@ const CreateAuctions = () => {
         required
       >
         <option value="Tech">Tech</option>
-        <option value="Food">Food</option>
-        <option value="Cars">Cars</option>
-        <option value="Beauty">Beauty</option>
-        <option value="Furniture">Furniture</option>
+        <option value="Videogames">Videogames</option>
+        <option value="Books">Books</option>
       </select>
 
       <label htmlFor="image">Image:</label>
