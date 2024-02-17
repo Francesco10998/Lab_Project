@@ -1,0 +1,118 @@
+version: "3.8"
+
+services:
+
+  rabbit:
+    image: rabbitmq:management-alpine
+    container_name: rabbitmq
+    restart: unless-stopped
+    depends_on:
+      - server-auction
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - my-network
+
+  mysql:
+    build:
+      context: "./db"
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: FraFeffo_98
+      MYSQL_DATABASE: golden_auctions
+    container_name: mysql
+    restart: unless-stopped
+    ports:
+      - "3307:3306" # Mappa la porta 3306 del container alla porta 3307 dell'host
+    volumes:
+      - my-db:/var/lib/mysql
+    networks:
+      - my-network
+
+  #mysql:
+   # image: mysql
+   # container_name: mysql
+   # environment:
+    #  MYSQL_ROOT_PASSWORD: "FraFeffo_98"
+    #  MYSQL_DATABASE: "golden_auctions"
+   # restart: unless-stopped
+   # ports:
+   #   - "3307:3306" # Mappa la porta 3306 del container alla porta 3307 dell'host
+  #  volumes:
+     # - my-db:/var/lib/mysql
+   # networks:
+     # - my-network
+
+
+  api-gateway:
+    build:
+      context: "./api-gateway"
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    networks:
+      - my-network
+
+  server-auction:
+    build:
+      context: "./server-auction"
+      dockerfile: Dockerfile
+    container_name: server-auction
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    networks:
+      - my-network
+
+  server-user:
+    build:
+      context: "./server-user"
+      dockerfile: Dockerfile
+    container_name: server-user
+    ports:
+      - "6000:6000"
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    networks:
+      - my-network
+
+  server-offer:
+    build:
+      context: "./server-offer"
+      dockerfile: Dockerfile
+    container_name: server-offer
+    ports:
+      - "10000:10000"
+    depends_on:
+      - mysql
+      - rabbit
+    restart: unless-stopped
+    networks:
+      - my-network
+
+  frontend:
+    build:
+      context: "./client"
+      dockerfile: Dockerfile
+    container_name: frontend
+    depends_on:
+      - api-gateway
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+volumes:
+  my-db:

@@ -1,56 +1,17 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import './css/MyOffers.css';
 import golden from "./images/goldenauctions.png"
+import noresults from "./images/noresults.png"
 import { differenceInMinutes, differenceInHours, differenceInDays, differenceInSeconds } from 'date-fns';
 
 const MyOffers = () => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [data, setData] = useState(null);
   const navigate = useNavigate();
-  const [counter, setCounter] = useState(0);
 
   const handleLogout = () => {
     sessionStorage.removeItem('userData');
   };
-
-  /*const Begin = async () => {
-    setUsername(sessionStorage.getItem('userData'));
-    try {
-      const response = await fetch('/myoffers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://localhost:8000',
-          // Add other headers if necessary
-        },
-        body: JSON.stringify({
-          username: username
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok.');
-      }
-
-      const result = await response.json();
-      setData(result);
-
-      console.log(result.length);
-
-    } 
-    catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-
-  useEffect(() =>{
-    if (counter < 2) {
-      Begin();
-      setCounter(counter + 1);
-    }
-  }, [counter]);*/
 
   const [auctions, setAuctions] = useState('');
 
@@ -83,7 +44,6 @@ const MyOffers = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://localhost:8000',
           // Add other headers if necessary
         },
         body: JSON.stringify({
@@ -114,7 +74,6 @@ const MyOffers = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://localhost:8000',
           // Add other headers if necessary
         },
         body: JSON.stringify({
@@ -196,6 +155,10 @@ const MyOffers = () => {
     const [articles, setArticles] = useState([]);
 
     useEffect(() => {
+       //if not logged redirect to home
+      if(sessionStorage.getItem('userData') == null){
+        navigate("/");
+      }
       const updateDeadlines = () => {        
         if (auctions && auctions.length > 0) {
           const updatedArticles = auctions.map((auction, index) => {
@@ -231,45 +194,62 @@ const MyOffers = () => {
       return () => clearInterval(updateInterval);
     }, [auctions]);
 
-    return(
-      <div id="general-container">
-        {articles.map((article, index) => (
-        <div id="auction-container">
-          <div class="auction-item">
-            <img src={article.image} class="image"></img>
-            <div class="item-details">
-              <h3 class="objectOffers">{article.title}</h3>
-              {article.isPassed ? (
-                <p class="betOffers">Sold at: ${article.leadingOffer}</p>
-              ) : (
-                <p class="betOffers">Current Bet: ${article.leadingOffer}</p>
-              )}
-              <p class="winnerOffers">Current Winner: {article.currentWinner}</p>
-              {article.isPassed && article.endsIn[0]==0 ? (
-                <p class="deadlineOffers"> Finished Today </p>
-              ) : article.isPassed && article.endsIn[0]==-1 ? (
-                <p class="deadlineOffers"> Finished Yesterday</p>
-              ) : article.isPassed ? (
-                <p class="deadlineOffers"> Finished {-article.endsIn[0]} Days Ago</p>
-              ) : (
-                <p class="deadlineOffers">Ends in {article.endsIn[0]} Days, {article.endsIn[1]} Hours, {article.endsIn[2]} Minutes, {article.endsIn[3]} Seconds</p>
-              )}
-              <Link to={article.url}>
-                <button class="redirectButtonOffers">Go to the Auction</button>
-              </Link>
-            </div>
+    const [isVisible, setIsVisible] = useState(false);
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 1000);
+
+
+    if(articles.length>0){
+      return(
+        <div>
+          <h1 class="titleOffers">My Offers</h1>
+            <div id="general-container">
+              {articles.map((article, index) => (
+              <div id="auction-container">
+                <div class="auction-item">
+                  <img src={article.image} class="image"></img>
+                  <div class="item-details">
+                    <h3 class="objectOffers">{article.title}</h3>
+                    {article.isPassed ? (
+                      <p class="betOffers">Sold at: ${article.leadingOffer}</p>
+                    ) : (
+                      <p class="betOffers">Current Bet: ${article.leadingOffer}</p>
+                    )}
+                    <p class="winnerOffers">Current Winner: {article.currentWinner}</p>
+                    {article.isPassed && article.endsIn[0]==0 ? (
+                      <p class="deadlineOffers"> Finished Today </p>
+                    ) : article.isPassed && article.endsIn[0]==-1 ? (
+                      <p class="deadlineOffers"> Finished Yesterday</p>
+                    ) : article.isPassed ? (
+                      <p class="deadlineOffers"> Finished {-article.endsIn[0]} Days Ago</p>
+                    ) : (
+                      <p class="deadlineOffers">Ends in {article.endsIn[0]} Days, {article.endsIn[1]} Hours, {article.endsIn[2]} Minutes, {article.endsIn[3]} Seconds</p>
+                    )}
+                    <Link to={article.url}>
+                      <button class="redirectButtonOffers">Go to the Auction</button>
+                    </Link>
+                  </div>
+                </div>
+              </div>  
+             ))}
           </div>
-        </div>  
-        ))}
-      </div>
-    )
+        </div>
+      )
+    }else{
+      return(
+        <div>
+          <h1 style={{marginLeft: '600px', display: isVisible ? 'block' : 'none'}}>No Auction followed</h1>
+          <img src={noresults} style={{height:'400px', marginLeft: '560px', display: isVisible ? 'block' : 'none'}}></img>
+        </div>
+      )
+    }
   }
 
 
   return (<div>
       <Titolo/>
       <NavbarLogged/>
-      <h1 class="titleOffers">My Offers</h1>
       <ShowAuctions/>
   </div>
   )

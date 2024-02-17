@@ -1,4 +1,4 @@
-import { Link, Navigate,useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import './css/Home.css';
 import plus from "./images/plus.png"
 import golden from "./images/goldenauctions.png"
@@ -170,7 +170,7 @@ function Home() {
   function Titolo(){
     return (
       <div style={{ textAlign: 'center',backgroundColor:'#333333',height:'30px'}}>
-        <img src={golden} style={{height:'70px', width:'400px', margin:'auto', marginTop:'5px'}}></img>
+        <img src={golden} alt="image of the item" style={{height:'70px', width:'400px', margin:'auto', marginTop:'5px'}}></img>
       </div>
     )
   }

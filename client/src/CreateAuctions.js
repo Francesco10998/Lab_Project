@@ -1,17 +1,15 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import './css/CreateAuctions.css';
-import golden from "./images/goldenauctions.png"
+import trending from "./images/trending.png"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 const CreateAuctions = () => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [data, setData] = useState(null);
   const navigate = useNavigate();
-  const [counter, setCounter] = useState(0);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -40,6 +38,7 @@ const CreateAuctions = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("prima di form data");
 
     console.log(formData);
     console.log(formData['name']);
@@ -53,6 +52,8 @@ const CreateAuctions = () => {
     formDataObject.append('category', formData.category);
     formDataObject.append('image', formData.image);
     formDataObject.append('username', formData.username);
+
+    console.log("dopo form data"+formDataObject);
 
     try {
       const response = await fetch('/createauctions', {
@@ -89,15 +90,20 @@ const CreateAuctions = () => {
   };
 
   useEffect(() => {
-    setUsername(sessionStorage.getItem('userData'))
+    setUsername(sessionStorage.getItem('userData'));
+    //if not logged redirect to home
+    if(sessionStorage.getItem('userData') == null){
+      navigate("/");
+    }
 }, []); 
 
 
-  function Titolo(){
+  function Titolo(){     
     return (
       <div style={{ textAlign: 'center',backgroundColor:'#333333',height:'30px'}}>
-        <img src={golden} style={{height:'70px', width:'400px', margin:'auto', marginTop:'5px'}}></img>
+       <img src={trending} style={{height:'100px', width:'430px', margin:'auto', marginTop:'-15px'}}></img>
       </div>
+    
     )
   }
 
@@ -126,12 +132,13 @@ const CreateAuctions = () => {
   }
 
 
-  return (<div>
+  return (
+  <div>
       <Titolo/>
-      <NavbarLogged/>
-      <h1 class="title">Create Auction</h1>
-      <div>
-      <form onSubmit={handleSubmit}style={{display:'flex', margin:'auto', flexDirection:'column', maxWidth:'30%'}}>
+      <NavbarLogged />
+      <h1 className="title">Create Auction</h1>
+    <div id="form-createAuctioniner">
+      <form onSubmit={handleSubmit} className="auction-form">
       <label htmlFor="name">Name of the object you want to sell :</label>
       <input
         type="text"
@@ -173,6 +180,8 @@ const CreateAuctions = () => {
         <option value="Tech">Tech</option>
         <option value="Videogames">Videogames</option>
         <option value="Books">Books</option>
+        <option value="Motors">Motors</option>
+        <option value="Clothes">Clothes</option>
       </select>
 
       <label htmlFor="image">Image:</label>
@@ -188,8 +197,10 @@ const CreateAuctions = () => {
       <button type="submit">Submit</button>
     </form>
     <ToastContainer />
+      </div>
     </div>
-  </div>
-  )
+    
+
+  );
 }
 export default CreateAuctions;

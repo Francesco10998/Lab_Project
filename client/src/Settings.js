@@ -1,4 +1,4 @@
-import { Link, Navigate, useRouteLoaderData } from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 import {React, useEffect, useState } from 'react';
 import './css/Settings.css';
 import golden from "./images/goldenauctions.png"
@@ -11,7 +11,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const Settings = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
-  const [data, setData] = useState("");
   const [password, setPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -24,6 +23,7 @@ const Settings = () => {
   const [mode,setMode] = useState('');
   const [parameter, setParameter] = useState('');
   const [counter, setCounter] = useState(0);
+  const navigate = useNavigate();
   let newParameter ='1';
 
   const [isPopupVisible, setPopupVisibility] = useState(false);
@@ -96,7 +96,6 @@ const Settings = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://localhost:8000',
           // Add other headers if necessary
         },
         body: JSON.stringify({
@@ -168,6 +167,10 @@ const Settings = () => {
       if(newParameter==2){
         if(result.data_user[0]==["Phone modified"]){
           toast.success('Phone number updated!',{
+            position: 'top-left',
+          });
+        }else if(result.data_user[0]==["Phone number not valid"]){
+          toast.error("Phone number not valid, max 9 number",{
             position: 'top-left',
           });
         }else{
@@ -291,7 +294,6 @@ const Settings = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://localhost:8000',
           // Add other headers if necessary
         },
         body: JSON.stringify({
@@ -322,7 +324,10 @@ const Settings = () => {
   }
 
   useEffect(() =>{
-    console.log("CANSU");
+    //if not logged redirect to home
+    if(sessionStorage.getItem('userData') == null){
+      navigate("/");
+    }
     if (counter < 2) {
       Display();
       setCounter(counter + 1);

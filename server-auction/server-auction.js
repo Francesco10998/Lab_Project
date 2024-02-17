@@ -282,18 +282,19 @@ app.post("/searchresults", (req, res) => {
 
 //---------------- offer management ------------------------
 app.post("/offer", (req, res) => {
-  const { username, id, bet, category } = req.body;
+  const { username, id, bet,current_bet, category } = req.body;
   console.log(req.body)
 
   Query = "SELECT bet FROM auctions where auctionId = '"+id+"'";
     utils.pool.query(Query, function (error, results, fields) {
         if (error){
           res.status(500).json({ "data_check": ["server error"] });
+          console.log("aoooooooooooooooooooo");
           throw error;
         }
         if (results.length !== 0) {
           if(bet > results[0].bet){
-            amqp.connect('amqp://localhost:5672', (err, connection) => {
+            amqp.connect('amqp://rabbit:5672', (err, connection) => {
               if (err) {
                   throw err;
               }
@@ -304,7 +305,7 @@ app.post("/offer", (req, res) => {
 
                   let exchangeName = 'ExchangeOffer';
                   let routingKey = category.toString(); //Routing Key for a specific Worker
-                  let arrayToSend = [bet, username.toString(), id];
+                  let arrayToSend = [bet, username.toString(), id, current_bet];
 
                   // Converti l'array in una stringa JSON
                   let message = JSON.stringify(arrayToSend);

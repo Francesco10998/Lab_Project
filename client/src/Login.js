@@ -1,7 +1,9 @@
-import { Link, Navigate,useNavigate } from "react-router-dom";
-import React, { useEffect,useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import React, {  useEffect, useState} from 'react';
 import './css/Login.css';
 import golden from "./images/goldenauctions.png"
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Login = () => {
@@ -47,6 +49,12 @@ const Login = () => {
     </div>
     )
   }
+  useEffect(() => {
+    //if not logged redirect to home
+    if(sessionStorage.getItem('userData') != null){
+      navigate("/");
+    }
+  }, []); 
 
   const handleSubmit = async (event) => {
 
@@ -57,7 +65,6 @@ const Login = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://localhost:8000',
           // Add other headers if necessary
         },
         body: JSON.stringify({
@@ -72,6 +79,17 @@ const Login = () => {
 
       const result = await response.json();
       setData(result);
+      //Check the server response for the Username
+      if(result.results=="wrong password"){
+        toast.error('Password inserted is wrong',{
+          position: 'top-left',
+        });
+      }
+      if(result.results=="wrong username"){
+        toast.error('Username not exists',{
+          position: 'top-left',
+        });
+      }
       if(result.results=="authenticated"){
         sessionStorage.setItem('userData',username);
         navigate('/');
@@ -99,8 +117,8 @@ const Login = () => {
         </form>
       </div>
       </div>
+      <ToastContainer />
     </div>
   )
 }
 export default Login;
-

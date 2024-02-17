@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import React, { useEffect, useState, useRef } from 'react';
 import './css/Auction.css';
 import golden from "./images/goldenauctions.png"
@@ -21,8 +21,6 @@ const Auction = () => {
   const [category, setCategory] = useState('');
 
   const inputRef = useRef();
-
-  const navigate = useNavigate();
 
   function getDeadline(finish){
     const options = {
@@ -62,7 +60,6 @@ const Auction = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://localhost:8000',
           // Add other headers if necessary
         },
         body: JSON.stringify({
@@ -93,7 +90,6 @@ const Auction = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://localhost:8000',
           // Add other headers if necessary
         },
         body: JSON.stringify({
@@ -179,13 +175,13 @@ const Auction = () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': 'https://localhost:8000',
               // Add other headers if necessary
             },
             body: JSON.stringify({
               username: user,
               id: auctions[0].auctionId,
               bet: inputRef.current.value,
+              current_bet: auctions[0].bet,
               category: category
             }),
           });
@@ -359,7 +355,10 @@ const Auction = () => {
                 </div>
               <div id="seller-name">Seller: {auction.creatorUsername}</div>
               {item && item.length > 0 && item.map((it) => (
-                <div id="item-description">{it[0].description}</div>
+                <div>
+                  <div id="category-name">Category: {it[0].category}</div>
+                  <div id="item-description">{it[0].description}</div>
+                </div>
               ))}
               {times && times.length > 0 && times.map((time) => {
                 if (!time.isPassed){

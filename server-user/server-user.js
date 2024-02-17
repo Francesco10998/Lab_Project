@@ -146,8 +146,6 @@ console.log(mode,username,password,newPassword,modifyParameter);
 
 //------when open setting return all the data react will put on the placeholder--------//
 if(mode=="enter"){
-    console.log("PENE");
-    //username = "feffo98";
     //take all data of the user
     QueryData = 'SELECT * FROM users WHERE username="'+username+'"';
 
@@ -162,7 +160,6 @@ if(mode=="enter"){
         //send user data to client
         res.json({'data_user': [results[0]]});
         console.log(results[0]);
-
         }
     }
     });
@@ -173,179 +170,187 @@ if(mode=="enter"){
 
     if(modifyParameter=='0'){
 
-    QueryExistUsername = "SELECT * FROM users WHERE username = '"+newUsername+"'";
-    utils.pool.query(QueryExistUsername, function (error, results, fields) {
-        if (error){
-            res.status(500).json({ "data_user": ["Server error"] });
-            throw error;
-        }
-        if (results.length !== 0) {
-            console.log(results);
-            res.json({ "data_user": [username] });
-        } else {
-        QueryModifyUsername = "UPDATE users SET username = '"+newUsername+"'WHERE username = '"+username+"'";
-        //execute query
-        utils.pool.query(QueryModifyUsername, function (error, results, fields) {
+        QueryExistUsername = "SELECT * FROM users WHERE username = '"+newUsername+"'";
+        utils.pool.query(QueryExistUsername, function (error, results, fields) {
             if (error){
-            res.status(500).json({ "data_user": ["server error"] });
-            throw error;
+                res.status(500).json({ "data_user": ["Server error"] });
+                throw error;
             }
             if (results.length !== 0) {
-            console.log(results);
-            res.json({ "data_user": ["username modified"] });
+                console.log(results);
+                res.json({ "data_user": [username] });
             } else {
-            console.log("Username not modified");
-            res.json({ "data_user": ["username not modified"] });
+            QueryModifyUsername = "UPDATE users SET username = '"+newUsername+"'WHERE username = '"+username+"'";
+            //execute query
+            utils.pool.query(QueryModifyUsername, function (error, results, fields) {
+                if (error){
+                res.status(500).json({ "data_user": ["server error"] });
+                throw error;
+                }
+                if (results.length !== 0) {
+                console.log(results);
+                res.json({ "data_user": ["username modified"] });
+                } else {
+                console.log("Username not modified");
+                res.json({ "data_user": ["username not modified"] });
+                }
+            });
             }
         });
-        }
-    });
     }
     
     ///##################################### CHANGE EMAIL ###############################################
-    if(modifyParameter=='1'){
+    else if(modifyParameter=='1'){
 
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (emailRegex.test(newEmail)) {
-        console.log("L'indirizzo email è valido.");
-        /// check if the new email already exist 
-        QueryCheckNewEmail = "SELECT * FROM users where email = '"+newEmail+"'";
-        utils.pool.query(QueryCheckNewEmail, function (error, results, fields) {
+        if (emailRegex.test(newEmail)) {
+            console.log("L'indirizzo email è valido.");
+            /// check if the new email already exist 
+            QueryCheckNewEmail = "SELECT * FROM users where email = '"+newEmail+"'";
+            utils.pool.query(QueryCheckNewEmail, function (error, results, fields) {
+                if (error){
+                res.status(500).json({ "data_user": ["server error"] });
+                throw error;
+                }
+                if (results.length !== 0) {
+                //// ---------- email already exists -------------------
+                console.log("Email not modified, already exists");
+                res.json({ "data_user": ["email already exists"] });
+                } else {
+                /// -----------change the email --------------
+                QueryModifyEmail = "UPDATE users SET email = '" + newEmail + "' WHERE username = '" + username + "'";
+                //execute query
+                utils.pool.query(QueryModifyEmail, function (error, results, fields) {
+                    if (error){
+                    res.status(500).json({ "data_user": ["server error"] });
+                    throw error;
+                    }
+                    if (results.length !== 0) {
+                    console.log(results);
+                    res.json({ "data_user": ["email modified"] });
+                    } else {
+                    console.log("Email not modified");
+                    res.json({ "data_user": ["email not modified"] });
+                    }
+                });
+                }
+            });
+            }else{
+            console.log("Email not satisfies the requirements");
+            res.json({ "data_user": ["email not satisfies"] });
+        }
+    }
+
+    ////################################## CHANGE PHONENUMBER ############################
+    else if(modifyParameter=='2'){
+        QueryModifyPhone = "UPDATE users SET phoneNumber = '" + newPhone + "' WHERE username = '" + username + "'";
+        console.log("ARRIVATO DOPO QUERY PHONE");
+
+        const regex = /^\d{1,9}$/;
+        if (regex.test(newPhone)) {
+            console.log('phone number valid');
+            //execute query
+            utils.pool.query(QueryModifyPhone, function (error, results, fields) {
+                if (error){
+                    console.error("Error executing query:", error);
+                    res.status(500).json({ "data_user": ["server error"] });
+                } else if (results.affectedRows > 0) {
+                    console.log("Phone modified");
+                    res.json({ "data_user": ["Phone modified"] });
+                } else {
+                    console.log("Phone not modified");
+                    res.json({ "data_user": ["Phone not modified"] });
+                }
+            });
+        }
+        else {
+            console.log('Phone number not valid');
+            res.json({ "data_user": ["Phone number not valid"] });
+        }
+    }
+    ///################################ CHANGE PASSWORD ###################################
+    else if(modifyParameter=='3'){
+        const cryptoNew = utils.sha256(String(newPassword))
+        const cryptoOld = utils.sha256(String(password))
+
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        
+        if (passwordRegex.test(newPassword)) {
+            console.log("La password è valida.");
+            //check old password
+            QueryExist = "SELECT username,pass FROM users WHERE username = '"+username+"'";
+            utils.pool.query(QueryExist, function (error, results, fields) {
+            if (error){
+                res.status(500).json({ "data_user": ["server error"] });
+                throw error;
+            }
+            if (results.length !== 0) {
+                //console.log(results[0].pass,cryptoOld,cryptoNew);
+                //update new password
+                if(results[0].pass==cryptoOld){
+                QueryModifyPassword = "UPDATE users SET pass = '" + cryptoNew + "' WHERE username = '" + username + "'";
+                utils.pool.query(QueryModifyPassword, function (error, results, fields) {
+                    if (error){
+                    res.status(500).json({ "data_user": ["server error"] });
+                    throw error;
+                    }
+                    if (results.length !== 0) {
+                    console.log(results);
+                    res.json({ "data_user": ["Password updated"] });
+                    } else {
+                    console.log("Password not modified");
+                    res.json({ "data_user": ["Password mismatch"] });
+                    }
+                });
+            } else {
+                console.log("Password mismatch");
+                res.json({ "data_user": ["Password mismatch"] });
+            }
+            }
+            });
+        }else{
+            console.log("Password does not satisfies the requirements");
+                res.json({ "data_user": ["Password not satisfies"] });
+        }
+    }
+
+    //################################### CHANGE ADDRESS #############################
+    else if(modifyParameter=='4'){
+        QueryModifyAddress = "UPDATE users SET address = '" + newAddress + "' WHERE username = '" + username + "'";
+        //execute query
+        utils.pool.query(QueryModifyAddress, function (error, results, fields) {
             if (error){
             res.status(500).json({ "data_user": ["server error"] });
             throw error;
             }
             if (results.length !== 0) {
-            //// ---------- email already exists -------------------
-            console.log("Email not modified, already exists");
-            res.json({ "data_user": ["email already exists"] });
+            console.log(results);
+            res.json({ "data_user": ["Address modified"] });
             } else {
-            /// -----------change the email --------------
-            QueryModifyEmail = "UPDATE users SET email = '" + newEmail + "' WHERE username = '" + username + "'";
-            //execute query
-            utils.pool.query(QueryModifyEmail, function (error, results, fields) {
-                if (error){
-                res.status(500).json({ "data_user": ["server error"] });
-                throw error;
-                }
-                if (results.length !== 0) {
-                console.log(results);
-                res.json({ "data_user": ["email modified"] });
-                } else {
-                console.log("Email not modified");
-                res.json({ "data_user": ["email not modified"] });
-                }
-            });
+            console.log("Address not modified");
+            res.json({ "data_user": ["Address not modified"] });
             }
         });
-        }else{
-        console.log("Email not satisfies the requirements");
-        res.json({ "data_user": ["email not satisfies"] });
-    }
-
-    }
-
-    ////################################## CHANGE PHONENUMBER ############################
-    if(modifyParameter=='2'){
-    QueryModifyPhone = "UPDATE users SET phoneNumber = '" + newPhone + "' WHERE username = '" + username + "'";
-    //execute query
-    utils.pool.query(QueryModifyPhone, function (error, results, fields) {
-        if (error){
-        res.status(500).json({ "data_user": ["server error"] });
-        throw error;
-        }
-        if (results.length !== 0) {
-        console.log(results);
-        res.json({ "data_user": ["Phone modified"] });
-        } else {
-        console.log("Phone not modified");
-        res.json({ "data_user": ["Phone not modified"] });
-        }
-    });
-    }
-    ///################################ CHANGE PASSWORD ###################################
-    if(modifyParameter=='3'){
-    const cryptoNew = utils.sha256(String(newPassword))
-    const cryptoOld = utils.sha256(String(password))
-
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-    
-    if (passwordRegex.test(newPassword)) {
-        console.log("La password è valida.");
-        //check old password
-        QueryExist = "SELECT username,pass FROM users WHERE username = '"+username+"'";
-        utils.pool.query(QueryExist, function (error, results, fields) {
-        if (error){
-            res.status(500).json({ "data_user": ["server error"] });
-            throw error;
-        }
-        if (results.length !== 0) {
-            //console.log(results[0].pass,cryptoOld,cryptoNew);
-            //update new password
-            if(results[0].pass==cryptoOld){
-            QueryModifyPassword = "UPDATE users SET pass = '" + cryptoNew + "' WHERE username = '" + username + "'";
-            utils.pool.query(QueryModifyPassword, function (error, results, fields) {
-                if (error){
-                res.status(500).json({ "data_user": ["server error"] });
-                throw error;
-                }
-                if (results.length !== 0) {
-                console.log(results);
-                res.json({ "data_user": ["Password updated"] });
-                } else {
-                console.log("Password not modified");
-                res.json({ "data_user": ["Password mismatch"] });
-                }
-            });
-        } else {
-            console.log("Password mismatch");
-            res.json({ "data_user": ["Password mismatch"] });
-        }
-        }
-        });
-    }else{
-        console.log("Password does not satisfies the requirements");
-            res.json({ "data_user": ["Password not satisfies"] });
-    }
-    }
-
-    //################################### CHANGE ADDRESS #############################
-    if(modifyParameter=='4'){
-    QueryModifyAddress = "UPDATE users SET address = '" + newAddress + "' WHERE username = '" + username + "'";
-    //execute query
-    utils.pool.query(QueryModifyAddress, function (error, results, fields) {
-        if (error){
-        res.status(500).json({ "data_user": ["server error"] });
-        throw error;
-        }
-        if (results.length !== 0) {
-        console.log(results);
-        res.json({ "data_user": ["Address modified"] });
-        } else {
-        console.log("Address not modified");
-        res.json({ "data_user": ["Address not modified"] });
-        }
-    });
     }
     
     ///################################ CHANGE PAYMENT METHOD ###################
-    if(modifyParameter=='5'){
-    QueryModifyPayment = "UPDATE users SET paymentMethod = '"+newPayment+"'WHERE username = '"+username+"'";
-    //execute query
-    utils.pool.query(QueryModifyPayment, function (error, results, fields) {
-        if (error){
-        res.status(500).json({ "data_user": ["server error"] });
-        throw error;
-        }
-        if (results.length !== 0) {
-        console.log(results);
-        res.json({ "data_user": ["Payment modified"] });
-        } else {
-        console.log("Payment not modified");
-        res.json({ "data_user": ["Payment not modified"] });
-        }
-    });
+    else if(modifyParameter=='5'){
+        QueryModifyPayment = "UPDATE users SET paymentMethod = '"+newPayment+"'WHERE username = '"+username+"'";
+        //execute query
+        utils.pool.query(QueryModifyPayment, function (error, results, fields) {
+            if (error){
+            res.status(500).json({ "data_user": ["server error"] });
+            throw error;
+            }
+            if (results.length !== 0) {
+            console.log(results);
+            res.json({ "data_user": ["Payment modified"] });
+            } else {
+            console.log("Payment not modified");
+            res.json({ "data_user": ["Payment not modified"] });
+            }
+        });
     }
     }
 });
@@ -354,4 +359,3 @@ if(mode=="enter"){
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
-  

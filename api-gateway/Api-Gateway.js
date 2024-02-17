@@ -10,8 +10,14 @@ const app = express();
 app.use(express.json());
 
 const multer = require('multer'); 
+//const FormData = require('form-data');
 const storage = multer.memoryStorage(); 
-const upload = multer({ storage: storage });
+//const upload = multer({ storage: storage });
+// Define multer storage and file size limit
+const upload = multer({
+  limits: { fileSize: 30 * 1024 * 1024}, // 30 MB file size limit
+  storage: storage
+});
 
 
 
@@ -22,7 +28,7 @@ app.post("/", (req, res) => {
 
   const postData = req.body;
   
-  axios.post('http://localhost:5000/', postData)
+  axios.post('http://server-auction:5000/', postData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);
@@ -39,7 +45,7 @@ app.post("/login", (req, res) => {
 
   const postData = req.body;
   
-  axios.post('http://localhost:6000/login', postData)
+  axios.post('http://server-user:6000/login', postData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);
@@ -55,7 +61,7 @@ app.post("/register", (req, res) => {
 
   const postData = req.body;
   
-  axios.post('http://localhost:6000/register', postData)
+  axios.post('http://server-user:6000/register', postData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);
@@ -70,7 +76,7 @@ app.post("/settings", (req, res) => {
 
   const postData = req.body;
   
-  axios.post('http://localhost:6000/settings', postData)
+  axios.post('http://server-user:6000/settings', postData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);
@@ -86,10 +92,11 @@ app.post("/settings", (req, res) => {
 app.post("/myoffers", (req, res) => {
   const postData = req.body;
   
-  axios.post('http://localhost:5000/myoffers', postData)
+  axios.post('http://server-auction:5000/myoffers', postData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);
+      console.log(response.data);
     })
     .catch(error => {
       console.error('Error during POST:', error);
@@ -100,7 +107,7 @@ app.post("/myoffers", (req, res) => {
 app.post("/myauctions", (req, res) => {
   const postData = req.body;
   
-  axios.post('http://localhost:5000/myauctions', postData)
+  axios.post('http://server-auction:5000/myauctions', postData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);
@@ -115,7 +122,7 @@ app.post("/myauctions", (req, res) => {
 app.post("/auction", (req, res) => {
   const postData = req.body;
   
-  axios.post('http://localhost:5000/auction', postData)
+  axios.post('http://server-auction:5000/auction', postData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);
@@ -129,7 +136,7 @@ app.post("/auction", (req, res) => {
 app.post("/offer", (req, res) => {
   const postData = req.body;
   
-  axios.post('http://localhost:5000/offer', postData)
+  axios.post('http://server-auction:5000/offer', postData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);
@@ -143,7 +150,7 @@ app.post("/offer", (req, res) => {
 app.post("/searchresults", (req, res) => {
   const postData = req.body;
   
-  axios.post('http://localhost:5000/searchresults', postData)
+  axios.post('http://server-auction:5000/searchresults', postData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);
@@ -177,7 +184,7 @@ app.post("/createauctions", upload.single('image'), (req, res) => {
     console.log(`${key}: ${value}`);
   }*/
   
-  axios.post('http://localhost:5000/createauctions', formData)
+  axios.post('http://server-auction:5000/createauctions', formData)
     .then(response => {
       console.log('Server Response:', response.data);
       res.json(response.data);

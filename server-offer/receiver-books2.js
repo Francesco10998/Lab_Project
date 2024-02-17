@@ -2,7 +2,7 @@ const amqp = require('amqplib/callback_api');
 
 const utils = require("./util");
 
-amqp.connect('amqp://localhost:5672', (err, connection) => {
+amqp.connect('amqp://rabbit:5672', (err, connection) => {
     if (err) {
         throw err;
     }
@@ -41,18 +41,30 @@ amqp.connect('amqp://localhost:5672', (err, connection) => {
                         throw error;
                     }
                     else{
-                        Query2 = "UPDATE auctions SET participants = CONCAT(participants, ',"+message[1]+"') WHERE FIND_IN_SET('"+message[1]+"', participants) = 0 AND auctionId='"+message[2]+"'";
-                        utils.pool.query(Query2, function (error, results, fields) {
-                            if (error){
-                                throw error;
-                            }
-                            else{
-                                console.log("Offer changed");
-                            }
-                        });
+                        //se è la prima volta che si fa l offerta viene aggiunto l username nel campo participants
+                        if(message[3]>0){
+                            Query2 = "UPDATE auctions SET participants = CONCAT(participants, ',"+message[1]+"') WHERE FIND_IN_SET('"+message[1]+"', participants) = 0 AND auctionId='"+message[2]+"'";
+                            utils.pool.query(Query2, function (error, results, fields) {
+                                if (error){
+                                    throw error;
+                                }
+                                else{
+                                    console.log("Offer changed");
+                                }
+                            });
+                        }else{
+                            Query2 = "UPDATE auctions SET participants ='"+message[1]+"'WHERE auctionId='"+message[2]+"'";
+                            utils.pool.query(Query2, function (error, results, fields) {
+                                if (error){
+                                    throw error;
+                                }
+                                else{
+                                    console.log("Offer changed");
+                                }
+                            });
+                        }
                     }
                 });
-
 
                 channel.ack(msg);
             }, {

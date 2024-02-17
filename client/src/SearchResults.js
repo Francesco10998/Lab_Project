@@ -1,4 +1,4 @@
-import { Link, Navigate,useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import './css/SearchResults.css';
 import plus from "./images/plus.png"
 //import logo from "./images/logo.jpg"
@@ -48,7 +48,6 @@ function SearchResults() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://localhost:8000',
           // Add other headers if necessary
         },
         body: JSON.stringify({
@@ -208,10 +207,7 @@ function SearchResults() {
     if(items.length>0){
         return (
         <div style={{ padding: '15px' }}>
-            <a href="Login.html" style={{ display: 'flex', width: '170px' }}>
-            <button style={{ borderRadius: '10px' }}>Create a new Auction</button>
-            <img src={plus} style={{ width: '20px', height: '20px' }} alt="plus-icon" />
-            </a>
+            <h1 style={{ marginLeft: '650px' }}>Results</h1>
             <br></br>
             <div className="grid">
             {articles.map((article, index) => (
@@ -234,10 +230,6 @@ function SearchResults() {
     else{
         return (
         <div style={{ padding: '15px' }}>
-            <a href="Login.html" style={{ display: 'flex', width: '170px' }}>
-            <button style={{ borderRadius: '10px' }}>Create a new Auction</button>
-            <img src={plus} style={{ width: '20px', height: '20px' }} alt="plus-icon" />
-            </a>
             <br></br>
             <h1 style={{ marginLeft: '650px', display: isVisible ? 'block' : 'none'  }}>No Results</h1>
             <img src={noresults} style={{height:'400px', marginLeft: '560px', display: isVisible ? 'block' : 'none'}}></img>

@@ -5,65 +5,49 @@ body {
   }
 
   .title{
-    margin-left: 660px;
-    margin-top: 40px;
+    margin-top: 20px;
   }
 
-  #auction-container {
-    width: 80%;
-    margin: auto;
-    overflow-x: auto;
-  }
+#form-createAuctioniner {
+  background-color: #fff;
+  border-radius: 10px;
+  width: 650px;
+  padding:10px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+  margin-left: 450px;
+  margin-top: 0px;
+}
 
-  .auction-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ccc;
-    padding: 20px; 
-    margin: 0px 0; 
-  }
+.auction-form {
+  display: flex;
+  flex-direction: column;
+}
 
-  .auction-item img {
-    max-width: 200px;
-    max-height: 200px;
-    margin-right: 10px;
-  }
+.auction-form label {
+  margin-bottom: 10px;
+}
 
-  .item-details {
-    flex-grow: 1;
-  }
+.auction-form input,
+.auction-form textarea,
+.auction-form select {
+  margin-bottom: 20px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
 
-  .object {
-    display: inline-block;
-    margin-left: 20px;
-    width: 150px;
-  }
+textarea {
+  resize: none;
+}
+.auction-form button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-  .bet {
-    display: inline-block;
-    margin-left: 160px;
-    width: 150px;
-  }
-
-  .deadline {
-    color: red;
-    display: inline-block;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    margin-left: 70px;
-    width: 200px;
-  }
-
-  .redirectButton {
-    margin-left: 80px;
-    background: gray;
-    border: 0;
-    color: white;
-    height: 30px;
-  }
-
-  .image {
-    width: 400px;
-  }
+.auction-form button:hover {
+  background-color: #0056b3;
+} 

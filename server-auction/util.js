@@ -19,7 +19,8 @@ var mysql = require('mysql2');
 */
 
 var pool = mysql.createPool({
-  host: "127.0.0.1",
+  host: "mysql",
+  port: 3306, 
   user: "root",
   password: "FraFeffo_98",
   database : 'golden_auctions',

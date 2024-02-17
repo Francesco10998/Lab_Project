@@ -1,5 +1,5 @@
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import React, { useEffect,useState } from 'react';
+import { Link,useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
 import './css/Register.css';
 import golden from "./images/goldenauctions.png"
 import { toast, ToastContainer } from 'react-toastify';
@@ -9,7 +9,6 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [email,setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [data, setData] = useState(null);
   const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
@@ -53,6 +52,12 @@ const Register = () => {
     )
   }
 
+  useEffect(() => {
+    //if not logged redirect to home
+    if(sessionStorage.getItem('userData') != null){
+      navigate("/");
+    }
+  }, []);
 
   const handleSubmit = async (event) => {
 
@@ -80,7 +85,6 @@ const Register = () => {
         }
   
         const result = await response.json();
-        setData(result);
         console.log("ENTRATO "+JSON.stringify(result.results));
 
         //Check the server response for the Email
