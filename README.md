@@ -22,3 +22,8 @@ System Objectives:
 To execute out project, you need to intall the following components:
 - Docker (v25.0.2)
 - Docker Compose (v2.24.3)
+
+## How to execute the Project
+After downloading from Git the Repository, go into the Folder of the Project and run the following command:
+> docker-compose up --build -d
+
