@@ -19,7 +19,7 @@ System Objectives:
 
 
 ## Requirements
-To execute out project, you need to intall the following components:
+To execute our project, you need to intall the following components:
 - Docker (v25.0.2)
 - Docker Compose (v2.24.3)
 
