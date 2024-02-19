@@ -29,3 +29,6 @@ After downloading from Git the Repository, go into the Folder of the Project and
 docker-compose up --build -d
 ```
 
+## Documentation
+The relative Documentation can be found in the following Folder: * https://github.com/Francesco10998/Lab_Project/tree/main/Documentation/
+
