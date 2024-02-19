@@ -2,6 +2,7 @@
 Repository of the Application developed for the Course of Laboratory of Advanced Propgramming.
 
 ## Project Idea
+![alt text]([http://url/to/img.png](https://github.com/Francesco10998/Lab_Project/blob/main/client/src/images/logo.jpg))
 Web application in which users can create their own auction or partecipate to those of other
 people by betting a certain price.
 System Objectives:
