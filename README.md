@@ -17,3 +17,8 @@ System Objectives:
 - Update their credentials.
 - Logout from the Application.
 
+
+## Requirements
+To execute out project, you need to intall the following components:
+- Docker (v25.0.2)
+- Docker Compose (v2.24.3)
