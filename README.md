@@ -25,5 +25,5 @@ To execute out project, you need to intall the following components:
 
 ## How to execute the Project
 After downloading from Git the Repository, go into the Folder of the Project and run the following command:
-`docker-compose up --build -d`
+```docker-compose up --build -d```
 
