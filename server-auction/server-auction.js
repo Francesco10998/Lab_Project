@@ -24,7 +24,10 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 
 const multer = require('multer'); 
 const storage = multer.memoryStorage(); 
-const upload = multer({ storage: storage });
+const upload = multer({
+  limits: { fieldSize:  100 * 1024 * 1024, fileSize: 100 * 1024 * 1024}, // 30 MB file size limit
+  storage: storage
+});
 
 //----------------- app routing -------------------------
 

@@ -101,7 +101,7 @@ const Register = () => {
 
         //Check the server response for the Password
         if(result.results=="Password not satisfies"){
-          toast.error('Password format is not correct',{
+          toast.error('Password should consists of at least 6 characters, a special one, an upper-case one and a number ',{
             position: 'top-left',
           });
         }

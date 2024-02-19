@@ -43,4 +43,75 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 600px;
+    height: 455px;
+  }
+
+  #deleteSubmitPopup{
+    background-color: #AA0000;
+    margin-top: 20px;
+    width: 200px;
+  }
+
+  #passwordPopup{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  #deletePopup{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  #deleteSubmit{
+    background-color: #AA0000;
+    border-radius: 8px;
+    padding: 6px;
+    border: none;
+    color: #fff;
+    width: 80px;
+    margin-left: 20px;
+  }
+
+  #undoDeleteButton{
+    background-color: #04AA6D;
+    border-radius: 8px;
+    padding: 6px;
+    border: none;
+    color: #fff;
+    width: 80px;
+    margin-left: 20px;
+  }
+
+  #passwordSubmit{
+    background-color: #04AA6D;
+    border-radius: 8px;
+    padding: 6px;
+    border: none;
+    color: #fff;
+    width: 80px;
+    margin-left: 10px;
+  }
+
+  #undoSubmit{
+    background-color: #04AA6D;
+    border-radius: 8px;
+    padding: 6px;
+    border: none;
+    color: #fff;
+    width: 80px;
+    margin-left: 10px;
+  }
+
+  #oldPassword{
+    width: 120px;
+  }
+
+  #newPassword{
+    width: 120px;
   }

@@ -352,6 +352,23 @@ if(mode=="enter"){
             }
         });
     }
+    else if(modifyParameter=='6'){
+        Query = "DELETE from users WHERE username='"+username+"'";
+        //execute query
+        utils.pool.query(Query, function (error, results, fields) {
+            if (error){
+                res.status(500).json({ "data_user": ["server error"] });
+                throw error;
+            }
+            if (results.length !== 0) {
+                console.log(results);
+                res.json({ "data_user": ["User deleted"] });
+            } else {
+                console.log("User not deleted");
+                res.json({ "data_user": ["User not deleted"] });
+            }
+        });
+    }
     }
 });
 

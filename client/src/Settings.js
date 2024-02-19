@@ -26,14 +26,25 @@ const Settings = () => {
   const navigate = useNavigate();
   let newParameter ='1';
 
+  const [userNavbar, setUserNavbar] = useState(sessionStorage.getItem('userData'));
+
   const [isPopupVisible, setPopupVisibility] = useState(false);
+  const [isPopupVisibleDelete, setPopupVisibilityDelete] = useState(false);
 
   const openPopup = () => {
     setPopupVisibility(true);
   };
 
+  const openPopupDelete = () => {
+    setPopupVisibilityDelete(true);
+  };
+
   const closePopup = () => {
     setPopupVisibility(false);
+  };
+
+  const closePopupDelete = () => {
+    setPopupVisibilityDelete(false);
   };
 
 
@@ -88,7 +99,10 @@ const Settings = () => {
       newParameter = '5';
       console.log('IBAN cambiato');
     }
-
+    if(event.target.id=='deleteSubmit'){
+      newParameter = '6';
+      console.log('Account deleted');
+    }
 
 
     try {
@@ -170,7 +184,7 @@ const Settings = () => {
             position: 'top-left',
           });
         }else if(result.data_user[0]==["Phone number not valid"]){
-          toast.error("Phone number not valid, max 9 number",{
+          toast.error("Phone number not valid, 1/9 number",{
             position: 'top-left',
           });
         }else{
@@ -219,7 +233,7 @@ const Settings = () => {
             position: 'top-left',
           });
         }else if(result.data_user[0]==["Password updated"]){
-          toast.success('Pasword updated!',{
+          toast.success('Password updated!',{
             position: 'top-left',
           });
         }else{
@@ -228,6 +242,12 @@ const Settings = () => {
           });
         }
       }
+
+      if(newParameter==6){
+        sessionStorage.removeItem('userData');
+        navigate("/");
+      }
+
       ///--------------------------------------------------------------------------------------------
       console.log(parameter,email,result,sessionStorage.getItem('userData'));
 
@@ -261,7 +281,7 @@ const Settings = () => {
   function NavbarLogged(){
     return (<div className="topnav">
       <a href="/" onClick={handleLogout} class="logout">Logout</a>
-      <a class="username">{username}</a>
+      <a class="username">{userNavbar}</a>
       <Link to="/settings">Settings</Link>
       <a href="MyOffers">My Offers</a>
       <a href="MyAuctions">My Auctions</a>
@@ -336,36 +356,52 @@ const Settings = () => {
 
   function Popupper(){
     return (
-      <div>
-        <Popup
-          open={isPopupVisible}
-          onClose={closePopup}
-          modal
-          closeOnDocumentClick
-        >
-          <div>
-            <label htmlFor="oldPassword">Vecchia Password:</label>
-            <input
-              type="password"
-              id="oldPassword"
-              value={oldPassword}
-              onChange={handleOldPasswordChange}
-            />
-  
-            <label htmlFor="newPassword">Nuova Password:</label>
-            <input
-              type="password"
-              id="newPassword"
-              value={newPassword}
-              onChange={handleNewPasswordChange}
-            />
-  
-            <button id="passwordSubmit"onClick={submitChange}>Cambia Password</button>
-            <button onClick={closePopup}>Annulla</button>
-            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-          </div>
-        </Popup>
-      </div>
+      <Popup
+        open={isPopupVisible}
+        onClose={closePopup}
+        modal
+        closeOnDocumentClick
+      >
+        <div id="passwordPopup">
+          <label htmlFor="oldPassword">Old Password:</label>
+          <input
+            type="password"
+            id="oldPassword"
+            value={oldPassword}
+            onChange={handleOldPasswordChange}
+          />
+
+          <label htmlFor="newPassword">New Password:</label>
+          <input
+            type="password"
+            id="newPassword"
+            value={newPassword}
+            onChange={handleNewPasswordChange}
+          />
+
+          <button id="passwordSubmit" onClick={submitChange}>Change</button>
+          <button id="undoSubmit"onClick={closePopup}>Undo</button>
+          {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        </div>
+      </Popup>
+    );
+  };
+
+  function PopupperDelete(){
+    return (
+      <Popup
+        open={isPopupVisibleDelete}
+        onClose={closePopupDelete}
+        modal
+        closeOnDocumentClick
+      >
+        <div id="deletePopup">
+          <label htmlFor="deleteLabel">Are you sure to delete your Account?</label>
+          <button id="deleteSubmit" onClick={submitChange}>Delete</button>
+          <button id="undoDeleteButton" onClick={closePopupDelete}>Undo</button>
+          {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        </div>
+      </Popup>
     );
   };
 
@@ -408,6 +444,9 @@ const Settings = () => {
           <input type="text" value={address} style={{width:'300px'}}  onChange={handleAddressChange}id="address" name="address" required />
           <button type="submit" class="button" id="addressSubmit"onClick={submitChange}>Change</button>
         </div>
+
+        <button type="submit" class="button" id="deleteSubmitPopup" onClick={openPopupDelete}>Delete Account</button>
+        {PopupperDelete()}
       </div>
 
 
