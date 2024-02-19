@@ -29,6 +29,7 @@ After downloading from Git the Repository, go into the Folder of the Project and
 docker-compose up --build -d
 ```
 
+To delete the build use:
 ```git
 docker compose down
 ```
