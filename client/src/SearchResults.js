@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import './css/SearchResults.css';
-import plus from "./images/plus.png"
 //import logo from "./images/logo.jpg"
 import golden from "./images/goldenauctions.png"
 import noresults from "./images/noresults.png"
@@ -130,6 +129,8 @@ function SearchResults() {
           <option value="tech">Tech</option>
           <option value="videogames">Videogames</option>
           <option value="books">Books</option>
+          <option value="tech">Clothes</option>
+          <option value="videogames">Motors</option>
         </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
@@ -154,6 +155,8 @@ function SearchResults() {
           <option value="tech">Tech</option>
           <option value="videogames">Videogames</option>
           <option value="books">Books</option>
+          <option value="tech">Clothes</option>
+          <option value="videogames">Motors</option>
         </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>

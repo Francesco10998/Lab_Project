@@ -206,7 +206,7 @@ const Auction = () => {
         }
     }
     else{
-      toast.error('Bet must be higher that the current one',{
+      toast.error('Bet must be higher than the current one',{
         position: 'top-left',
       });
     }
@@ -251,6 +251,8 @@ const Auction = () => {
           <option value="tech">Tech</option>
           <option value="videogames">Videogames</option>
           <option value="books">Books</option>
+          <option value="tech">Clothes</option>
+          <option value="videogames">Motors</option>
         </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
@@ -264,7 +266,7 @@ const Auction = () => {
       <a href="/" onClick={handleLogout} class="logout">Logout</a>
       <a class="username">{user}</a>
       <Link to="/settings">Settings</Link>
-      <a href="MyOffers">My Offers</a>
+      <a href="/myoffers">My Offers</a>
       <Link to="/myauctions">My Auctions</Link>
       <a href="/">Home</a>
 
@@ -275,6 +277,8 @@ const Auction = () => {
           <option value="tech">Tech</option>
           <option value="videogames">Videogames</option>
           <option value="books">Books</option>
+          <option value="tech">Clothes</option>
+          <option value="videogames">Motors</option>
         </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>

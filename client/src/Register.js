@@ -129,15 +129,19 @@ const Register = () => {
       <Navbar/>
       <div className="title" style={{margin:'auto'}}>
       <div style={{margin:'auto'}}>
-        <br />
-        <br />
-        <h2>Register</h2>
-        <form className='loginform' onSubmit={handleSubmit}>
-          <input type="text" name="username" placeholder="Username" value={username} onChange={handleUsernameChange} required />
-          <input type="email" name="email" placeholder="Email" value={email} onChange={handleEmailChange} required />
-          <input type="password" name="password" placeholder="Password" value={password} onChange={handlePasswordChange} required />
-          <input type="submit" value="Submit" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }} />
-        </form>
+        <h2>Registration</h2>
+        <div id="container_register">
+          <form className='loginform' onSubmit={handleSubmit}>
+            <label for="username" id="username_label_register">Username</label>
+            <input type="username" name="username" value={username} onChange={handleUsernameChange} required />
+            <label for="email" id="email_label_register">Email</label>
+            <input type="email" name="email"  value={email} onChange={handleEmailChange} required />
+            <label for="password" id="password_label_register">Password </label>
+            <input type="password" name="password" value={password} onChange={handlePasswordChange} required />
+            <input type="submit" id="submit_register" value="Submit" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }} />
+          </form>
+          <p id="p_register">Have already an account?</p><Link id="link_to_login" to="/login">login</Link>
+        </div>
       </div>
       </div>
       <ToastContainer />

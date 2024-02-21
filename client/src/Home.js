@@ -4,6 +4,9 @@ import plus from "./images/plus.png"
 import golden from "./images/goldenauctions.png"
 import { useEffect, useState } from 'react';
 import { differenceInMinutes, differenceInHours, differenceInDays, differenceInSeconds } from 'date-fns';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useLocation } from 'react-router-dom';
 
 function Home() {
   //Take the current Username
@@ -11,7 +14,14 @@ function Home() {
 
   const [auctions, setAuctions] = useState('');
 
-  //const [counter, setCounter] = useState(0);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const deleted = queryParams.get('deleted');
+  
+
+  const [counter, setCounter] = useState(0);
+  const [del, setDel] = useState(false);
 
   const [item, setItem] = useState('');
 
@@ -95,6 +105,7 @@ function Home() {
 
   useEffect(() => {
       setUser(sessionStorage.getItem('userData'));
+    
       const fetchData = async () => {
         try {
           const auctionsResult = await getAuctions();
@@ -155,6 +166,7 @@ function Home() {
     return (<div>
       <Titolo/>
       <NavbarLogged/>
+      <ToastContainer/>
       <Auctions/>
     </div>)
   }
@@ -162,6 +174,7 @@ function Home() {
     return (<div>
         <Titolo/>
         <Navbar/>
+        <ToastContainer/>
         <Auctions/>
     </div>
     )
@@ -188,6 +201,8 @@ function Home() {
           <option value="tech">Tech</option>
           <option value="videogames">Videogames</option>
           <option value="books">Books</option>
+          <option value="tech">Clothes</option>
+          <option value="videogames">Motors</option>
         </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
@@ -212,12 +227,26 @@ function Home() {
           <option value="tech">Tech</option>
           <option value="videogames">Videogames</option>
           <option value="books">Books</option>
+          <option value="tech">Clothes</option>
+          <option value="videogames">Motors</option>
         </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
 
     </div>
     )
+  }
+
+  function PopupHome(){
+    if (deleted == 1 && counter<2) {
+      if(!del && counter==1){
+        toast.success('Account Deleted Successfully',{
+          position: 'top-left',
+        });
+        setDel(true);
+      }
+      setCounter(counter+1);
+    }
   }
 
   function Auctions() {
@@ -263,6 +292,8 @@ function Home() {
       // Cleanup the interval when the component unmounts
       return () => clearInterval(updateInterval);
     }, [auctions]);
+
+
     
     return (
       <div style={{ padding: '15px' }}>
@@ -290,6 +321,7 @@ function Home() {
             </article>
           ))}
         </div>
+        {PopupHome()}
       </div>
     );
   }

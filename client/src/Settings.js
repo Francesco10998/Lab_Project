@@ -7,6 +7,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useLocation } from 'react-router-dom';
 
 const Settings = () => {
 
@@ -242,10 +243,12 @@ const Settings = () => {
           });
         }
       }
-
+      // check server response for delete account
       if(newParameter==6){
         sessionStorage.removeItem('userData');
-        navigate("/");
+        const url = `/?deleted=1`;
+        window.location.href = url;
+        //navigate("/");
       }
 
       ///--------------------------------------------------------------------------------------------
@@ -294,6 +297,8 @@ const Settings = () => {
           <option value="tech">Tech</option>
           <option value="videogames">Videogames</option>
           <option value="books">Books</option>
+          <option value="tech">Clothes</option>
+          <option value="videogames">Motors</option>
         </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>

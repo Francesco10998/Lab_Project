@@ -12,8 +12,58 @@
 }
 
 .loginform input[type="text"],
+.loginform input[type="username"],
 .loginform input[type="password"],
 .loginform input[type="email"],
 .loginform input[type="submit"] {
   font-size: 24px; 
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+#username_label_register{
+  margin-top:30px;
+  font-size: 24px;
+  text-align: left;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+#email_label_register{
+  font-size: 24px;
+  text-align: left;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+#password_label_register{
+  font-size: 24px;
+  text-align: left;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+#submit_register{
+  margin-top: 30px;
+  margin-right: 30px;
+  margin-left: 30px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+#container_register{
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px; /* Arrotonda i bordi del container */
+  border: 1px solid #ccc; /* Aggiungi un bordo per evidenziare il container */
+  background-color: #FFFFFF;
+}
+
+#p_register{
+  font-size: 20px;
+  margin-right:20px;
+  margin-left:20px;
+}
+
+#link_to_login{
+  font-size: 20px;
+  margin-bottom: 20px;
 }

@@ -148,6 +148,8 @@ const MyAuctions = () => {
           <option value="tech">Tech</option>
           <option value="videogames">Videogames</option>
           <option value="books">Books</option>
+          <option value="tech">Clothes</option>
+          <option value="videogames">Motors</option>
         </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>

@@ -42,6 +42,8 @@ const Login = () => {
           <option value="tech">Tech</option>
           <option value="videogames">Videogames</option>
           <option value="books">Books</option>
+          <option value="tech">Clothes</option>
+          <option value="videogames">Motors</option>
         </select>
         <input type="submit" value="Search"style={{borderRadius:'10px'}} />
       </form>
@@ -107,14 +109,17 @@ const Login = () => {
       <Navbar/>
       <div className="title" style={{margin:'auto'}}>
       <div class="logincontainer" style={{margin:'auto'}}>
-        <br />
-        <br />
         <h2>Login</h2>
-        <form className='loginform' onSubmit={handleSubmit}>
-          <input type="text" name="username" placeholder="Username" value={username} onChange={handleUsernameChange} required />
-          <input type="password" name="password" placeholder="Password" value={password} onChange={handlePasswordChange} required />
-          <input type="submit" value="Login" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }} />
-        </form>
+        <div id="container_login">
+          <form className='loginform' onSubmit={handleSubmit}>
+            <label for="username" id="username_label">Username </label>
+            <input type="text" name="username"  value={username} onChange={handleUsernameChange} required />
+            <label for="password" id="password_label">Password </label>
+            <input type="password" name="password"  value={password} onChange={handlePasswordChange} required />
+            <input type="submit" id="submit_login" value="Login" style={{ backgroundColor: '#007bff', color: '#fff', cursor: 'pointer' }} />
+          </form>
+          <p id="p_login">Don't have an account?</p><Link id="link_to_register" to="/register">Register</Link>
+        </div>
       </div>
       </div>
       <ToastContainer />
